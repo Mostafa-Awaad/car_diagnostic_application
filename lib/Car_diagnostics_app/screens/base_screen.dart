@@ -19,7 +19,7 @@ class _BaseScreenState extends State<BaseScreen> {
     });
   }
 
-  // Bottom navigation icon with gradient effect
+  // Bottom navigation icon with gradient(Mix of Colors) effect
   Widget _bottomAppBarIcon({required int index, required IconData icon}) {
     bool isSelected = _selectedIndex == index;
 
@@ -54,17 +54,20 @@ class _BaseScreenState extends State<BaseScreen> {
     return Scaffold(
       bottomNavigationBar: BottomAppBar(
         elevation: 10,
-        color: Colors.transparent,
+        color: Color(0xFF1B1B1F),
         child: SafeArea(
           child: Container(
             height: 70,
             decoration: BoxDecoration(
               gradient: LinearGradient(
-                colors: [Colors.black.withOpacity(0.8), Colors.black.withOpacity(0.5)],
+                //For changing the color of the bottom navigation bar
+                colors: [Colors.blueGrey.withOpacity(0.8), Colors.black.withOpacity(0.3)],
                 begin: Alignment.topCenter,
                 end: Alignment.bottomCenter,
               ),
-              borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+              //The Radius for of the borders of the navigation bar
+              borderRadius: BorderRadius.vertical(top: Radius.circular(20), bottom: Radius.circular(20)),
+            
             ),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -78,7 +81,7 @@ class _BaseScreenState extends State<BaseScreen> {
                     clipBehavior: Clip.none,
                     children: [
                       Positioned(
-                        bottom: 20,
+                        bottom: 10,
                         child: Container(
                           decoration: BoxDecoration(
                             shape: BoxShape.circle,
@@ -123,6 +126,9 @@ class _BaseScreenState extends State<BaseScreen> {
         child: IndexedStack(
           index: _selectedIndex,
           children: [
+            // List of Widgets each widget represents a page
+            // Navigation to different pages (HomeScreen, (Container1 -> bar_chart), SettingScreen,
+            // Container2 -> profile )
             HomeScreen(),
             Container(
               child: Center(
@@ -133,7 +139,14 @@ class _BaseScreenState extends State<BaseScreen> {
               ),
             ),
             SettingsScreen(),
-            Container()
+            Container(
+              child: Center(
+                child: Text(
+                  'Page 04',
+                  style: TextStyle(color: Colors.white, fontSize: 24, fontWeight: FontWeight.bold),
+                ),
+              ),
+            )
           ],
         ),
       ),

@@ -1,6 +1,6 @@
 import 'package:flutter/cupertino.dart';
 
-const Color kBottomAppBarColor = Color.fromARGB(255, 49, 52, 63);
+const Color kBottomAppBarColor = Color.fromRGBO(49, 52, 63, 1);
 const Color kPrimaryColor = Color.fromARGB(255, 1, 161, 254);
 const Color kSecondaryColor = Color.fromARGB(255, 107, 200, 252);
 

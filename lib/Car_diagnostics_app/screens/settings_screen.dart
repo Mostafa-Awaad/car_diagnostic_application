@@ -28,8 +28,12 @@ class SettingsScreen extends StatelessWidget {
                 ),
                 Spacer(),
                 Text(
-                  'MODEL X',
-                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                  'MODEL 0',
+                  style: TextStyle(fontSize: 25, 
+                  fontWeight: FontWeight.w200,
+                  fontFamily: 'Orbitron'
+                   ),
+                  
                 ),
               ],
             ),

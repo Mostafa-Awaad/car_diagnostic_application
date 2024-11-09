@@ -10,19 +10,20 @@ class CarDiagnosticsApp extends StatelessWidget {
       title: 'Car Diagnostics', // App title
       theme: ThemeData(
         brightness: Brightness.dark, // Sets the app theme to dark mode
-        scaffoldBackgroundColor: Color(0xFF0A0A0A), // Deep dark background color for the scaffold
+        // The color of the background behind the bottom navigation bar
+        scaffoldBackgroundColor: Colors.black, // Deep dark background color for the scaffold
         primaryColor: Color(0xFF00FFC6), // Primary color, a bright neon green-cyan
 
         // Dark color scheme for the theme, with custom primary and secondary colors
         colorScheme: ColorScheme.dark(
           primary: Color(0xFF00FFC6), // Matches primaryColor above
           secondary: Color(0xFF29B6F6), // Neon blue used for secondary elements
-          background: Color(0xFF0A0A0A), // Background color for app screens
+          background: Color(0xFF1B1B1F), // Background color for app screens
         ),
 
         // Icon theme settings for general app icons
         iconTheme: IconThemeData(
-          color: Color(0xFFB0BEC5), // Muted gray color for non-primary icons
+          color: Colors.blueGrey, // Muted gray color for non-primary icons
           size: 30, // Larger icon size
         ),
 
@@ -63,7 +64,7 @@ class CarDiagnosticsApp extends StatelessWidget {
 
         // AppBar (top bar) theme with custom color and text style
         appBarTheme: AppBarTheme(
-          color: Color(0xFF0A0A0A), // Dark background matching the app's overall theme
+          color: Colors.black, // Dark background matching the app's overall theme
           elevation: 0, // No elevation, making the AppBar flat
           iconTheme: IconThemeData(color: Color(0xFF00FFC6)), // Icon color for AppBar icons (neon green-cyan)
           titleTextStyle: TextStyle(
