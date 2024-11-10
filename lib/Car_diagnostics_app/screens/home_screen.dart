@@ -1,23 +1,58 @@
+import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:demo_car_diagnostic_application/Car_diagnostics_app/configs/colors.dart';
 import 'package:syncfusion_flutter_gauges/gauges.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
 
-class Speedometer extends StatelessWidget {
-  const Speedometer({Key? key}) : super(key: key);
+class Speedometer extends StatefulWidget {
+  const Speedometer({super.key});
+
+  @override
+  _SpeedometerState createState() => _SpeedometerState();
+}
+
+class _SpeedometerState extends State<Speedometer> {
+  final SupabaseClient _supabase = Supabase.instance.client;
+  double currentSpeed = 0.0;
+  List<dynamic> speedData = [];
+  int currentIndex = 0;
+
+  @override
+  void initState() {
+    super.initState();
+    fetchSpeedData();
+  }
+
+  Future<void> fetchSpeedData() async {
+    final response = await _supabase.from('car_logs').select('data_frame');
+
+    setState(() {
+      speedData = response as List<dynamic>;
+    });
+    updateSpeed();
+  }
+
+  void updateSpeed() {
+    if (speedData.isNotEmpty) {
+      setState(() {
+        String base64String = speedData[currentIndex]['data_frame'];
+        List<int> bytes = base64.decode(base64String);
+        currentSpeed = bytes[7].toDouble();
+        // Ensures continous loop, once the current index reaches the end, it wraps back to 0
+        currentIndex = (currentIndex + 1) % speedData.length;
+      });
+      Future.delayed(const Duration(seconds: 1), updateSpeed);
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
-    double currentSpeed = 120; // Example speed value
-
-    Color speedColor;
-    if (currentSpeed < 100) {
-      speedColor = Colors.blue; // Blue for speeds below 100
-    } else if (currentSpeed < 150) {
-      speedColor = Colors.purple; // Purple for speeds between 100 and 150
-    } else {
-      speedColor = Colors.red; // Red for speeds above 150
-    }
+    Color speedColor = currentSpeed < 100
+        ? Colors.blue
+        : currentSpeed < 150
+            ? Colors.purple
+            : Colors.red;
 
     return Center(
       child: SfRadialGauge(
@@ -63,7 +98,7 @@ class Speedometer extends StatelessWidget {
                   mainAxisSize: MainAxisSize.min,
                   children: <Widget>[
                     Text(
-                      currentSpeed.toString(),
+                      currentSpeed.toStringAsFixed(0),
                       style: TextStyle(
                         fontSize: 40,
                         fontWeight: FontWeight.bold,
@@ -101,12 +136,14 @@ class HomeScreen extends StatelessWidget {
     double fuelLevel = 80; // Example fuel level in percentage
 
     // Set the text color based on the temperature
-    Color temperatureColor = temperature > 30 ? Colors.redAccent.shade200 : Colors.teal;
+    Color temperatureColor =
+        temperature > 30 ? Colors.redAccent.shade200 : Colors.teal;
 
     return SafeArea(
       child: Container(
         padding: const EdgeInsets.all(10),
         child: SingleChildScrollView(
+          physics: BouncingScrollPhysics(),
           child: Column(
             children: [
               Material(
@@ -126,7 +163,8 @@ class HomeScreen extends StatelessWidget {
                           iconSize: 50,
                           splashRadius: 25,
                           onPressed: () {},
-                          icon: FittedBox(child: Icon(Icons.account_circle_rounded)),
+                          icon: FittedBox(
+                              child: Icon(Icons.account_circle_rounded)),
                         ),
                         Positioned(
                           top: 10,
@@ -165,12 +203,14 @@ class HomeScreen extends StatelessWidget {
                   style: TextStyle(fontSize: 35, fontWeight: FontWeight.w200),
                 ),
               ),
-              Image.asset('lib/Car_diagnostics_app/images/normal_car_front_view.png'),
+              Image.asset(
+                  'lib/Car_diagnostics_app/images/normal_car_front_view.png'),
               const Speedometer(),
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  SvgPicture.asset('lib/Car_diagnostics_app/images/lighting.svg'),
+                  SvgPicture.asset(
+                      'lib/Car_diagnostics_app/images/lighting.svg'),
                   Padding(
                     padding: const EdgeInsets.only(right: 25),
                     child: Text('Current Speed'),
@@ -198,7 +238,10 @@ class HomeScreen extends StatelessWidget {
                             children: [
                               ShaderMask(
                                 shaderCallback: (bounds) => LinearGradient(
-                                  colors: [Colors.teal, Colors.redAccent.shade200],
+                                  colors: [
+                                    Colors.teal,
+                                    Colors.redAccent.shade200
+                                  ],
                                   begin: Alignment.topLeft,
                                   end: Alignment.bottomRight,
                                 ).createShader(bounds),
@@ -302,7 +345,9 @@ class HomeScreen extends StatelessWidget {
                                   style: TextStyle(
                                     fontSize: 50,
                                     fontWeight: FontWeight.bold,
-                                    color: fuelLevel > 30 ? Colors.teal : Colors.redAccent,
+                                    color: fuelLevel > 30
+                                        ? Colors.teal
+                                        : Colors.redAccent,
                                   ),
                                 ),
                               ),
