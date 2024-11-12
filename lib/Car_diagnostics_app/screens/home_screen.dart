@@ -5,6 +5,7 @@ import 'package:demo_car_diagnostic_application/Car_diagnostics_app/configs/colo
 import 'package:syncfusion_flutter_gauges/gauges.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
+// Create a class for Speedometer. Making it extends StatefulWidget because the vehicle speed value will change over time.
 class Speedometer extends StatefulWidget {
   const Speedometer({super.key});
 
@@ -13,71 +14,98 @@ class Speedometer extends StatefulWidget {
 }
 
 class _SpeedometerState extends State<Speedometer> {
+  //Initialize the Supabase client, the Supabase_Url and Supabase_Anon_Key is stored in .env file
   final SupabaseClient _supabase = Supabase.instance.client;
+
+  //Define a Variable for vehicle current speed and initialize it wtih 0.
   double currentSpeed = 0.0;
-  List<dynamic> speedData = [];
+  //Define a list for storing speedData, which stores any type of data whether int or double.
+  List<dynamic> dataFrame = [];
+  //Define a variable for storing current index for the current row in the car_logs table.
   int currentIndex = 0;
 
   @override
   void initState() {
     super.initState();
-    fetchSpeedData();
+    fetchDataFrame();
   }
 
-  Future<void> fetchSpeedData() async {
+  /// @brief:   Function for fetching data frame by querying the data_frame column from the car_logs table
+  ///           Using Future class, because we have asynchronous computation which need to wait for something external to the program
+  ///           such as querying a database in our case
+  ///
+  /// @retval:  Void Function
+  Future<void> fetchDataFrame() async {
+    ///Receiving the data from the data_frame column in car_logs table
+    ///Using await operation to delay execution until anohter synchronous computation has a result.
     final response = await _supabase.from('car_logs').select('data_frame');
 
     setState(() {
-      speedData = response as List<dynamic>;
+      //Storing the whole data frame in a dynamic list
+      dataFrame = response as List<dynamic>;
     });
     updateSpeed();
+    
   }
 
+  /// @brief:   Function for updating vehicle speed value when iteration through rows. 
+  ///           This is achieved by decoding the encoded current data frame, then accessing the 8th byte and convert it to double
+  ///
+  /// @retval:  Void Function
   void updateSpeed() {
-    if (speedData.isNotEmpty) {
+    if (dataFrame.isNotEmpty) {
       setState(() {
-        String base64String = speedData[currentIndex]['data_frame'];
+        String base64String = dataFrame[currentIndex]['data_frame'];
         List<int> bytes = base64.decode(base64String);
         currentSpeed = bytes[7].toDouble();
         // Ensures continous loop, once the current index reaches the end, it wraps back to 0
-        currentIndex = (currentIndex + 1) % speedData.length;
+        currentIndex = (currentIndex + 1) % dataFrame.length;
       });
+      //Delay 1 second between two consecutive readings
       Future.delayed(const Duration(seconds: 1), updateSpeed);
     }
   }
 
   @override
   Widget build(BuildContext context) {
-    Color speedColor = currentSpeed < 100
+    //Changing the color of the text showing the speed value depending on its range
+    Color speedColor = currentSpeed <= 100
         ? Colors.blue
-        : currentSpeed < 150
+        : ((100 < currentSpeed) && (currentSpeed <= 190))
             ? Colors.purple
             : Colors.red;
 
     return Center(
       child: SfRadialGauge(
+
+        ///Initializing a Radial Guage with its specifications
         axes: <RadialAxis>[
           RadialAxis(
             minimum: 0,
-            maximum: 200,
-            showLabels: false,
-            showTicks: false,
+            maximum: 255,
+            showLabels: true,
+            showTicks: true,
             axisLineStyle: AxisLineStyle(
               thickness: 20,
               cornerStyle: CornerStyle.bothCurve,
               color: Colors.grey[800],
               thicknessUnit: GaugeSizeUnit.logicalPixel,
             ),
+
+            ///Initializing range pointer of the radial guage with its specification
             pointers: <GaugePointer>[
               RangePointer(
                 value: currentSpeed,
                 width: 20,
                 gradient: const SweepGradient(
+                  ///Make the range pointer a mix with three colours to beautify the design
                   colors: [Colors.cyan, Colors.blueAccent, Colors.purple],
                   stops: [0.0, 0.5, 1.0],
                 ),
                 cornerStyle: CornerStyle.bothCurve,
               ),
+
+              ///Initializing the Needle pointer to point to the current speed value and configure its specifications
               NeedlePointer(
                 value: currentSpeed,
                 needleLength: 0.9,
@@ -92,6 +120,8 @@ class _SpeedometerState extends State<Speedometer> {
                 ),
               ),
             ],
+
+            ///Positioning the Guage annotation and specify its format and style
             annotations: <GaugeAnnotation>[
               GaugeAnnotation(
                 widget: Column(
@@ -213,7 +243,14 @@ class HomeScreen extends StatelessWidget {
                       'lib/Car_diagnostics_app/images/lighting.svg'),
                   Padding(
                     padding: const EdgeInsets.only(right: 25),
-                    child: Text('Current Speed'),
+                    child: Text(
+                      'Current Speed',
+                      style: TextStyle(
+                        fontSize: 25,
+                        color: Colors.white,
+                        fontWeight: FontWeight.bold,
+                      ),
+                      ),
                   )
                 ],
               ),
