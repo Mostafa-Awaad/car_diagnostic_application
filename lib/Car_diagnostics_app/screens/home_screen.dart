@@ -816,4 +816,3 @@ class HomeScreen extends StatelessWidget {
     );
   }
 }
-//I try to make the following two cards in a grid view in the bottom of the screen with reasonable padding that fit in all screens, regenerate the code to make it applicable 
