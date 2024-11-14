@@ -192,22 +192,30 @@ class SettingsScreen extends StatelessWidget {
                     child: Text('Sensors',
                         style: TextStyle(fontWeight: FontWeight.bold)),
                   ),
-                  Row(
+                  const Row(
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: [
                       Sensor(
+                        sensor_width: 60,
+                        heigth: 120,
                         value: 0.8,
                         label: 'Motors',
                       ),
                       Sensor(
+                        sensor_width: 60,
+                        heigth: 120,
                         value: 0.4,
                         label: 'Batery Temp',
                       ),
                       Sensor(
+                        sensor_width: 60,
+                        heigth: 120,
                         value: 0.9,
                         label: 'Brakes',
                       ),
                       Sensor(
+                        sensor_width: 60,
+                        heigth: 120,
                         value: 0.6,
                         label: 'Suspentions',
                       )
@@ -228,11 +236,14 @@ class Sensor extends StatelessWidget {
     Key? key,
     required this.value,
     required this.label,
+    required this.heigth,
+    required this.sensor_width,
   }) : super(key: key);
 
   final double value;
-  final double heigth = 120.0;
+  final double heigth;
   final String label;
+  final double sensor_width;
 
   @override
   Widget build(BuildContext context) {
@@ -241,7 +252,7 @@ class Sensor extends StatelessWidget {
         ClipRRect(
             borderRadius: BorderRadius.circular(10),
             child: Container(
-              width: 50,
+              width: sensor_width,
               height: heigth,
               color: kProgressBackGroundColor.withOpacity(0.5),
               child: Column(
