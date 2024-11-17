@@ -73,7 +73,8 @@ class _SpeedometerState extends State<Speedometer> {
   ///
   /// @retval:  Void Function
   static void updateSpeedData(List<Object> args) {
-    int speedHexIndex = 14; // The hex index position for speed (e.g., 14 for '9c' in "3b3740fa75f27a9c")
+    int speedHexIndex =
+        14; // The hex index position for speed (e.g., 14 for '9c' in "3b3740fa75f27a9c")
     List<dynamic> data = args[0] as List<dynamic>;
     SendPort sendPort = args[1] as SendPort;
     int index0 = 0;
@@ -232,8 +233,8 @@ class _TemperatureGaugeState extends State<TemperatureGauge> {
   }
 
   static void updateTemperatureData(List<Object> args) {
-   
-    int tempCoolantHexIndex = 12; // Specify the correct hex index position for speed (e.g., 14 for '9c' in "3b3740fa75f27a9c")
+    int tempCoolantHexIndex =
+        12; // Specify the correct hex index position for speed (e.g., 12 for '7a' in "3b3740fa75f27a9c")
     List<dynamic> data = args[0] as List<dynamic>;
     SendPort sendPort = args[1] as SendPort;
     int index1 = 0;
@@ -438,17 +439,29 @@ class _FuelGaugeState extends State<FuelGauge> {
   }
 
   static void updateFuelData(List<Object> args) {
-    int fuelByteIndex = 4; // Index for fuel data in the data_frame
+    int fuelLevelHexIndex =
+        6; // Specify the correct hex index position for Fuel Level (e.g., 6 for 'fa' in "3b3740fa75f27a9c")
     List<dynamic> data = args[0] as List<dynamic>;
     SendPort sendPort = args[1] as SendPort;
     int index1 = 0;
 
     Timer.periodic(const Duration(seconds: 1), (timer) {
+      // Decode the base64-encoded data_frame and convert to hex format
       String base64String = data[index1]['data_frame'];
       List<int> bytes = base64.decode(base64String);
-      double fuelLevel = bytes[fuelByteIndex].toDouble();
+      String hexDataFrame =
+          bytes.map((byte) => byte.toRadixString(16).padLeft(2, '0')).join();
 
-      sendPort.send(fuelLevel);
+      // Access speed from specified hex index
+      String fuelLevelHexValue =
+          hexDataFrame.substring(fuelLevelHexIndex, fuelLevelHexIndex + 2);
+      double fuelLevelValue =
+          (int.parse(fuelLevelHexValue, radix: 16) * 0.392156862745098);
+
+      // Send the speed value as a double (convert or map to the appropriate range as needed)
+      sendPort.send(fuelLevelValue.toDouble());
+
+      // Move to the next data frame
       index1 = (index1 + 1) % data.length;
     });
   }
@@ -492,7 +505,6 @@ class _FuelGaugeState extends State<FuelGauge> {
                   axisLineStyle: const AxisLineStyle(
                       thicknessUnit: GaugeSizeUnit.factor, thickness: 0.1),
                   ranges: <GaugeRange>[
-                    
                     GaugeRange(
                       startValue: 0,
                       endValue: 25,
@@ -556,7 +568,7 @@ class _FuelGaugeState extends State<FuelGauge> {
                         mainAxisSize: MainAxisSize.min,
                         children: <Widget>[
                           Text(
-                            '${(currentFuelLevel * 0.392156862745098).toStringAsFixed(0)}%',
+                            '${(currentFuelLevel).toStringAsFixed(0)}%',
                             style: TextStyle(
                               fontSize: gaugeSize * 0.2,
                               fontWeight: FontWeight.bold,

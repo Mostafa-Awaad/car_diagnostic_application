@@ -44,6 +44,7 @@ dependencies:
   syncfusion_flutter_gauges: ^27.1.58
   postgres: ^3.4.2
   flutter_isolate: ^2.1.0
+  liquid_progress_indicator_v2: ^0.5.0
  
 
 dev_dependencies:
