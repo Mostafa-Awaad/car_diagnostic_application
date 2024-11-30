@@ -28,82 +28,203 @@ class _SpeedometerState extends State<Speedometer> {
   //Define a variable for storing current index for the current row in the car_logs table.
   int currentIndex = 0;
   //Define speedisolate that will be initialized later when accessed for accessing vehicle speed data
-  late Isolate speedisolate;
+  Isolate? speedisolate;
   //Define Receive port for the speed value that will be used to return the value of the vehicle speed to the main isolate of the program
   late ReceivePort speedReceivePort;
   @override
   void initState() {
     super.initState();
-    fetchDataFrame();
-  }
 
-  /// @brief:   Function for fetching data frame by querying the data_frame column from the car_logs table
-  ///           Using Future class, because we have asynchronous computation which need to wait for something external to the program
-  ///           such as querying a database in our case
-  ///
-  /// @retval:  Void Function
-  Future<void> fetchDataFrame() async {
-    ///Receiving the data from the data_frame column in car_logs table
-    ///Using await operation to delay execution until anohter synchronous computation has a result.
-    final response = await _supabase.from('car_logs').select('data_frame');
-    //Storing the whole data frame in a dynamic list
-    dataFrame = response as List<dynamic>;
-    startSpeedIsolate();
-  }
-
-// Starting the Isolate specified for updating vehicle speed data
-  void startSpeedIsolate() {
-    //ReceivePort receivePort = ReceivePort();
+    // Initialize ReceivePort for isolate communication
     speedReceivePort = ReceivePort();
-    speedReceivePort.listen((speedData) {
-      setState(() {
-        currentSpeed = speedData as double;
-      });
+    speedReceivePort.listen((message) {
+      if (message is double) {
+        // Vehicle speed data received
+        setState(() {
+          currentSpeed = message;
+        });
+      } else {
+        //debugPrint("Unknown message type received: $message");
+      }
     });
 
-    //Spawning the vehicle speed isolate
-    Isolate.spawn(
-      updateSpeedData,
-      [dataFrame, speedReceivePort.sendPort],
-    );
+    // Fetch the most recent row initially
+    fetchMostRecentRow().then((latestRow) {
+      if (latestRow != null) {
+        //debugPrint("latest row: $latestRow");
+        handleNewRow(latestRow);
+      }
+    });
+    // Subscribe to real-time updates
+    subscribeToRealtimeUpdates();
   }
 
-  /// @brief:   Function for updating vehicle speed value when iteration through rows.
-  ///           This is achieved by decoding the encoded current data frame, then accessing the 8th byte and convert it to double
-  ///
-  /// @retval:  Void Function
-  static void updateSpeedData(List<Object> args) {
-    int speedHexIndex =
-        14; // The hex index position for speed (e.g., 14 for '9c' in "3b3740fa75f27a9c")
-    List<dynamic> data = args[0] as List<dynamic>;
-    SendPort sendPort = args[1] as SendPort;
-    int index0 = 0;
+  Future<Map<String, dynamic>?> fetchMostRecentRow() async {
+    try {
+      final List<dynamic> response = await _supabase
+          .from('car_logs_2')
+          .select('data_frame')
+          .order('timestamp', ascending: false)
+          .limit(1);
 
-    Timer.periodic(const Duration(seconds: 1), (timer) {
-      // Decode the base64-encoded data_frame and convert to hex format
-      String base64String = data[index0]['data_frame'];
+      if (response.isNotEmpty) {
+        return response.first as Map<String, dynamic>;
+      } else {
+        //debugPrint("No data found in the table.");
+      }
+    } catch (e) {
+      //debugPrint("Error fetching initial row: $e");
+    }
+    return null;
+  }
+
+  void subscribeToRealtimeUpdates() {
+    _supabase
+        .from('car_logs_2')
+        .stream(primaryKey: ['message_number']) // Use the table's primary key
+        .listen((rows) {
+      if (rows.isNotEmpty) {
+        final latestRow = rows.last;
+        //debugPrint("New row received: $latestRow");
+        handleNewRow(latestRow);
+      }
+    });
+  }
+
+  void handleNewRow(Map<String, dynamic> row) {
+    final base64String = row['data_frame'] as String;
+
+    try {
+      // Decode the base64-encoded data_frame and convert it to hex format
       List<int> bytes = base64.decode(base64String);
       String hexDataFrame =
           bytes.map((byte) => byte.toRadixString(16).padLeft(2, '0')).join();
 
-      // Access speed from specified hex index
-      String speedHexValue =
-          hexDataFrame.substring(speedHexIndex, speedHexIndex + 2);
-      int speedValue = int.parse(speedHexValue, radix: 16);
+      // Extract and calculate the vehicle speed
+      const int vehicleSpeedHexIndex = 14; // Hex index for speed value
+      String vehicleSpeedHexValue = hexDataFrame.substring(
+        vehicleSpeedHexIndex,
+        vehicleSpeedHexIndex + 2,
+      );
+      double vehicleSpeedValue =
+          int.parse(vehicleSpeedHexValue, radix: 16).toDouble();
 
-      // Send the speed value as a double (convert or map to the appropriate range as needed)
-      sendPort.send(speedValue.toDouble());
+      //debugPrint("Decoded vehicle speed: $vehicleSpeedValue");
 
-      // Move to the next data frame
-      index0 = (index0 + 1) % data.length;
-    });
+      // Send the processed data (vehicle speed) to the isolate
+      if (speedisolate == null) {
+        //debugPrint("Spawning new isolate for speed updates...");
+        Isolate.spawn(
+          processSpeedData,
+           vehicleSpeedValue,
+        ).then((isolate) {
+          speedisolate = isolate;
+          //debugPrint("Isolate spawned successfully.");
+        }).catchError((error) {
+          //debugPrint("Error spawning isolate: $error");
+        });
+      } else {
+        //debugPrint("Sending processed data to existing isolate: $vehicleSpeedValue");
+        speedReceivePort.sendPort.send(vehicleSpeedValue);
+      }
+    } catch (e) {
+      //debugPrint("Error decoding data frame: $e");
+    }
+  }
+
+  static void processSpeedData(double vehicleSpeedValue) {
+    
+    try {
+      // Simulate periodic updates back to the main thread
+      Timer.periodic(const Duration(seconds: 2), (timer) {
+        //debugPrint("Sending processed speed back to main thread: $vehicleSpeedValue");
+      });
+    } catch (e) {
+      //debugPrint("Error in isolate: $e");
+    }
   }
 
   @override
   void dispose() {
-    speedisolate.kill(priority: Isolate.immediate);
+    //debugPrint("Disposing Speedometer...");
+    if (speedisolate != null) {
+      speedisolate?.kill(priority: Isolate.immediate);
+      speedisolate = null; // Reset to avoid any unexpected reuse
+    }
+    speedReceivePort.close();
     super.dispose();
   }
+
+//   /// @brief:   Function for fetching data frame by querying the data_frame column from the car_logs table
+//   ///           Using Future class, because we have asynchronous computation which need to wait for something external to the program
+//   ///           such as querying a database in our case
+//   ///
+//   /// @retval:  Void Function
+//   Future<void> fetchDataFrame() async {
+//     ///Receiving the data from the data_frame column in car_logs table
+//     ///Using await operation to delay execution until anohter synchronous computation has a result.
+//     final response = await _supabase.from('car_logs').select('data_frame');
+//     //Storing the whole data frame in a dynamic list
+//     dataFrame = response as List<dynamic>;
+//     startSpeedIsolate();
+//   }
+
+// // Starting the Isolate specified for updating vehicle speed data
+//   void startSpeedIsolate() {
+//     //ReceivePort receivePort = ReceivePort();
+//     speedReceivePort = ReceivePort();
+//     speedReceivePort.listen((speedData) {
+//       setState(() {
+//         currentSpeed = speedData as double;
+//       });
+//     });
+
+//     //Spawning the vehicle speed isolate
+//     Isolate.spawn(
+//       updateSpeedData,
+//       [dataFrame, speedReceivePort.sendPort],
+//     );
+//   }
+
+//   /// @brief:   Function for updating vehicle speed value when iteration through rows.
+//   ///           This is achieved by decoding the encoded current data frame, then accessing the 8th byte and convert it to double
+//   ///
+//   /// @retval:  Void Function
+//   static void updateSpeedData(List<Object> args) {
+//     int speedHexIndex =
+//         14; // The hex index position for speed (e.g., 14 for '9c' in "3b3740fa75f27a9c")
+//     List<dynamic> data = args[0] as List<dynamic>;
+//     SendPort sendPort = args[1] as SendPort;
+//     int index0 = 0;
+
+//     Timer.periodic(const Duration(seconds: 1), (timer) {
+//       // Decode the base64-encoded data_frame and convert to hex format
+//       String base64String = data[index0]['data_frame'];
+//       List<int> bytes = base64.decode(base64String);
+//       String hexDataFrame =
+//           bytes.map((byte) => byte.toRadixString(16).padLeft(2, '0')).join();
+
+//       // Access speed from specified hex index
+//       String speedHexValue =
+//           hexDataFrame.substring(speedHexIndex, speedHexIndex + 2);
+//       int speedValue = int.parse(speedHexValue, radix: 16);
+
+//       // Send the speed value as a double (convert or map to the appropriate range as needed)
+//       sendPort.send(speedValue.toDouble());
+
+//       // Move to the next data frame
+//       index0 = (index0 + 1) % data.length;
+//     });
+//   }
+
+  // @override
+  // void dispose() {
+  //   if (speedisolate != null) {
+  //     speedisolate!.kill(priority: Isolate.immediate);
+  //   }
+  //   speedReceivePort.close();
+  //   super.dispose();
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -134,7 +255,7 @@ class _SpeedometerState extends State<Speedometer> {
             pointers: <GaugePointer>[
               RangePointer(
                 value: currentSpeed,
-                width: 20,
+                width: 20, 
                 gradient: const SweepGradient(
                   ///Make the range pointer a mix with three colours to beautify the design
                   colors: [Colors.cyan, Colors.blueAccent, Colors.purple],
@@ -201,67 +322,206 @@ class TemperatureGauge extends StatefulWidget {
 }
 
 class _TemperatureGaugeState extends State<TemperatureGauge> {
-  double currentTemperature = 0.0;
-  final SupabaseClient _supabase = Supabase.instance.client;
-  List<dynamic> dataFrame = [];
-  late Isolate temperatureIsolate;
-  late ReceivePort temperatureReceivePort;
+//   double currentTemperature = 0.0;
+//   final SupabaseClient _supabase = Supabase.instance.client;
+//   List<dynamic> dataFrame = [];
+//   late Isolate temperatureIsolate;
+//   late ReceivePort temperatureReceivePort;
 
+//   @override
+//   void initState() {
+//     super.initState();
+//     fetchDataFrame();
+//   }
+
+//   Future<void> fetchDataFrame() async {
+//     final response = await _supabase.from('car_logs').select('data_frame');
+//     dataFrame = response as List<dynamic>;
+//     startTemperatureIsolate();
+//   }
+
+//   void startTemperatureIsolate() {
+//     temperatureReceivePort = ReceivePort();
+//     temperatureReceivePort.listen((tempData) {
+//       setState(() {
+//         currentTemperature = tempData as double;
+//       });
+//     });
+//     Isolate.spawn(
+//       updateTemperatureData,
+//       [dataFrame, temperatureReceivePort.sendPort],
+//     );
+//   }
+
+//   static void updateTemperatureData(List<Object> args) {
+//     int tempCoolantHexIndex =
+//         12; // Specify the correct hex index position for speed (e.g., 12 for '7a' in "3b3740fa75f27a9c")
+//     List<dynamic> data = args[0] as List<dynamic>;
+//     SendPort sendPort = args[1] as SendPort;
+//     int index1 = 0;
+
+//     Timer.periodic(const Duration(seconds: 1), (timer) {
+//       // Decode the base64-encoded data_frame and convert to hex format
+//       String base64String = data[index1]['data_frame'];
+//       List<int> bytes = base64.decode(base64String);
+//       String hexDataFrame =
+//           bytes.map((byte) => byte.toRadixString(16).padLeft(2, '0')).join();
+
+//       // Access speed from specified hex index
+//       String tempCoolantHexValue =
+//           hexDataFrame.substring(tempCoolantHexIndex, tempCoolantHexIndex + 2);
+//       int tempCoolantValue = (int.parse(tempCoolantHexValue, radix: 16) - 40);
+
+//       // Send the speed value as a double (convert or map to the appropriate range as needed)
+//       sendPort.send(tempCoolantValue.toDouble());
+
+//       // Move to the next data frame
+//       index1 = (index1 + 1) % data.length;
+//     });
+//   }
+
+//   @override
+//   void dispose() {
+//     temperatureIsolate.kill(priority: Isolate.immediate);
+//     super.dispose();
+//   }
+
+  //Initialize the Supabase client, the Supabase_Url and Supabase_Anon_Key is stored in .env file
+  final SupabaseClient _supabase = Supabase.instance.client;
+
+  //Define a Variable for vehicle current speed and initialize it wtih 0.
+  double currentTemperature = 0.0;
+
+  //Define a list for storing different data types, which stores any type of data whether int or double.
+  List<dynamic> dataFrame = [];
+
+  //Define a variable for storing current index for the current row in the car_logs table.
+  int currentIndex = 0;
+  //Define speedisolate that will be initialized later when accessed for accessing vehicle speed data
+  Isolate? speedisolate;
+  //Define Receive port for the speed value that will be used to return the value of the vehicle speed to the main isolate of the program
+  late ReceivePort speedReceivePort;
   @override
   void initState() {
     super.initState();
-    fetchDataFrame();
-  }
 
-  Future<void> fetchDataFrame() async {
-    final response = await _supabase.from('car_logs').select('data_frame');
-    dataFrame = response as List<dynamic>;
-    startTemperatureIsolate();
-  }
-
-  void startTemperatureIsolate() {
-    temperatureReceivePort = ReceivePort();
-    temperatureReceivePort.listen((tempData) {
-      setState(() {
-        currentTemperature = tempData as double;
-      });
+    // Initialize ReceivePort for isolate communication
+    speedReceivePort = ReceivePort();
+    speedReceivePort.listen((message) {
+      if (message is double) {
+        // Vehicle speed data received
+        setState(() {
+          currentTemperature = message;
+        });
+      } else {
+        //debugPrint("Unknown message type received: $message");
+      }
     });
-    Isolate.spawn(
-      updateTemperatureData,
-      [dataFrame, temperatureReceivePort.sendPort],
-    );
+
+    // Fetch the most recent row initially
+    fetchMostRecentRow().then((latestRow) {
+      if (latestRow != null) {
+        //debugPrint("latest row: $latestRow");
+        handleNewRow(latestRow);
+      }
+    });
+    // Subscribe to real-time updates
+    subscribeToRealtimeUpdates();
   }
 
-  static void updateTemperatureData(List<Object> args) {
-    int tempCoolantHexIndex =
-        12; // Specify the correct hex index position for speed (e.g., 12 for '7a' in "3b3740fa75f27a9c")
-    List<dynamic> data = args[0] as List<dynamic>;
-    SendPort sendPort = args[1] as SendPort;
-    int index1 = 0;
+  Future<Map<String, dynamic>?> fetchMostRecentRow() async {
+    try {
+      final List<dynamic> response = await _supabase
+          .from('car_logs_2')
+          .select('data_frame')
+          .order('timestamp', ascending: false)
+          .limit(1);
 
-    Timer.periodic(const Duration(seconds: 1), (timer) {
-      // Decode the base64-encoded data_frame and convert to hex format
-      String base64String = data[index1]['data_frame'];
+      if (response.isNotEmpty) {
+        return response.first as Map<String, dynamic>;
+      } else {
+        //debugPrint("No data found in the table.");
+      }
+    } catch (e) {
+      //debugPrint("Error fetching initial row: $e");
+    }
+    return null;
+  }
+
+  void subscribeToRealtimeUpdates() {
+    _supabase
+        .from('car_logs_2')
+        .stream(primaryKey: ['message_number']) // Use the table's primary key
+        .listen((rows) {
+      if (rows.isNotEmpty) {
+        final latestRow = rows.last;
+        //debugPrint("New row received: $latestRow");
+        handleNewRow(latestRow);
+      }
+    });
+  }
+
+  void handleNewRow(Map<String, dynamic> row) {
+    final base64String = row['data_frame'] as String;
+
+    try {
+      // Decode the base64-encoded data_frame and convert it to hex format
       List<int> bytes = base64.decode(base64String);
       String hexDataFrame =
           bytes.map((byte) => byte.toRadixString(16).padLeft(2, '0')).join();
 
-      // Access speed from specified hex index
-      String tempCoolantHexValue =
-          hexDataFrame.substring(tempCoolantHexIndex, tempCoolantHexIndex + 2);
-      int tempCoolantValue = (int.parse(tempCoolantHexValue, radix: 16) - 40);
+      // Extract and calculate the vehicle speed
+      const int vehicleSpeedHexIndex = 12; // Hex index for speed value
+      String vehicleSpeedHexValue = hexDataFrame.substring(
+        vehicleSpeedHexIndex,
+        vehicleSpeedHexIndex + 2,
+      );
+      double vehicleSpeedValue =
+          (int.parse(vehicleSpeedHexValue, radix: 16) - 40).toDouble();
 
-      // Send the speed value as a double (convert or map to the appropriate range as needed)
-      sendPort.send(tempCoolantValue.toDouble());
+      //debugPrint("Decoded vehicle speed: $vehicleSpeedValue");
 
-      // Move to the next data frame
-      index1 = (index1 + 1) % data.length;
-    });
+      // Send the processed data (vehicle speed) to the isolate
+      if (speedisolate == null) {
+        //debugPrint("Spawning new isolate for speed updates...");
+        Isolate.spawn(
+          processSpeedData,
+           vehicleSpeedValue,
+        ).then((isolate) {
+          speedisolate = isolate;
+          //debugPrint("Isolate spawned successfully.");
+        }).catchError((error) {
+          //debugPrint("Error spawning isolate: $error");
+        });
+      } else {
+        //debugPrint("Sending processed data to existing isolate: $vehicleSpeedValue");
+        speedReceivePort.sendPort.send(vehicleSpeedValue);
+      }
+    } catch (e) {
+      //debugPrint("Error decoding data frame: $e");
+    }
+  }
+
+  static void processSpeedData(double vehicleSpeedValue) {
+    
+    try {
+      // Simulate periodic updates back to the main thread
+      Timer.periodic(const Duration(seconds: 2), (timer) {
+        //debugPrint("Sending processed speed back to main thread: $vehicleSpeedValue");
+      });
+    } catch (e) {
+      //debugPrint("Error in isolate: $e");
+    }
   }
 
   @override
   void dispose() {
-    temperatureIsolate.kill(priority: Isolate.immediate);
+    //debugPrint("Disposing Speedometer...");
+    if (speedisolate != null) {
+      speedisolate?.kill(priority: Isolate.immediate);
+      speedisolate = null; // Reset to avoid any unexpected reuse
+    }
+    speedReceivePort.close();
     super.dispose();
   }
 
@@ -407,68 +667,207 @@ class FuelGauge extends StatefulWidget {
 }
 
 class _FuelGaugeState extends State<FuelGauge> {
-  double currentFuelLevel = 0.0;
-  final SupabaseClient _supabase = Supabase.instance.client;
-  List<dynamic> dataFrame = [];
-  late Isolate fuelIsolate;
-  late ReceivePort fuelReceivePort;
+//   double currentFuelLevel = 0.0;
+//   final SupabaseClient _supabase = Supabase.instance.client;
+//   List<dynamic> dataFrame = [];
+//   late Isolate fuelIsolate;
+//   late ReceivePort fuelReceivePort;
 
+//   @override
+//   void initState() {
+//     super.initState();
+//     fetchDataFrame();
+//   }
+
+//   Future<void> fetchDataFrame() async {
+//     final response = await _supabase.from('car_logs').select('data_frame');
+//     dataFrame = response as List<dynamic>;
+//     startFuelIsolate();
+//   }
+
+//   void startFuelIsolate() {
+//     fuelReceivePort = ReceivePort();
+//     fuelReceivePort.listen((fuelData) {
+//       setState(() {
+//         currentFuelLevel = fuelData as double;
+//       });
+//     });
+//     Isolate.spawn(
+//       updateFuelData,
+//       [dataFrame, fuelReceivePort.sendPort],
+//     );
+//   }
+
+//   static void updateFuelData(List<Object> args) {
+//     int fuelLevelHexIndex =
+//         6; // Specify the correct hex index position for Fuel Level (e.g., 6 for 'fa' in "3b3740fa75f27a9c")
+//     List<dynamic> data = args[0] as List<dynamic>;
+//     SendPort sendPort = args[1] as SendPort;
+//     int index1 = 0;
+
+//     Timer.periodic(const Duration(seconds: 1), (timer) {
+//       // Decode the base64-encoded data_frame and convert to hex format
+//       String base64String = data[index1]['data_frame'];
+//       List<int> bytes = base64.decode(base64String);
+//       String hexDataFrame =
+//           bytes.map((byte) => byte.toRadixString(16).padLeft(2, '0')).join();
+
+//       // Access speed from specified hex index
+//       String fuelLevelHexValue =
+//           hexDataFrame.substring(fuelLevelHexIndex, fuelLevelHexIndex + 2);
+//       double fuelLevelValue =
+//           (int.parse(fuelLevelHexValue, radix: 16) * 0.392156862745098);
+
+//       // Send the speed value as a double (convert or map to the appropriate range as needed)
+//       sendPort.send(fuelLevelValue.toDouble());
+
+//       // Move to the next data frame
+//       index1 = (index1 + 1) % data.length;
+//     });
+//   }
+
+//   @override
+//   void dispose() {
+//     fuelIsolate.kill(priority: Isolate.immediate);
+//     super.dispose();
+//   }
+
+  //Initialize the Supabase client, the Supabase_Url and Supabase_Anon_Key is stored in .env file
+  final SupabaseClient _supabase = Supabase.instance.client;
+
+  //Define a Variable for vehicle current speed and initialize it wtih 0.
+  double currentFuelLevel = 0.0;
+
+  //Define a list for storing different data types, which stores any type of data whether int or double.
+  List<dynamic> dataFrame = [];
+
+  //Define a variable for storing current index for the current row in the car_logs table.
+  int currentIndex = 0;
+  //Define speedisolate that will be initialized later when accessed for accessing vehicle speed data
+  Isolate? speedisolate;
+  //Define Receive port for the speed value that will be used to return the value of the vehicle speed to the main isolate of the program
+  late ReceivePort speedReceivePort;
   @override
   void initState() {
     super.initState();
-    fetchDataFrame();
-  }
 
-  Future<void> fetchDataFrame() async {
-    final response = await _supabase.from('car_logs').select('data_frame');
-    dataFrame = response as List<dynamic>;
-    startFuelIsolate();
-  }
-
-  void startFuelIsolate() {
-    fuelReceivePort = ReceivePort();
-    fuelReceivePort.listen((fuelData) {
-      setState(() {
-        currentFuelLevel = fuelData as double;
-      });
+    // Initialize ReceivePort for isolate communication
+    speedReceivePort = ReceivePort();
+    speedReceivePort.listen((message) {
+      if (message is double) {
+        // Vehicle speed data received
+        setState(() {
+          currentFuelLevel = message;
+        });
+      } else {
+        //debugPrint("Unknown message type received: $message");
+      }
     });
-    Isolate.spawn(
-      updateFuelData,
-      [dataFrame, fuelReceivePort.sendPort],
-    );
+
+    // Fetch the most recent row initially
+    fetchMostRecentRow().then((latestRow) {
+      if (latestRow != null) {
+        //debugPrint("latest row: $latestRow");
+        handleNewRow(latestRow);
+      }
+    });
+    // Subscribe to real-time updates
+    subscribeToRealtimeUpdates();
   }
 
-  static void updateFuelData(List<Object> args) {
-    int fuelLevelHexIndex =
-        6; // Specify the correct hex index position for Fuel Level (e.g., 6 for 'fa' in "3b3740fa75f27a9c")
-    List<dynamic> data = args[0] as List<dynamic>;
-    SendPort sendPort = args[1] as SendPort;
-    int index1 = 0;
+  Future<Map<String, dynamic>?> fetchMostRecentRow() async {
+    try {
+      final List<dynamic> response = await _supabase
+          .from('car_logs_2')
+          .select('data_frame')
+          .order('timestamp', ascending: false)
+          .limit(1);
 
-    Timer.periodic(const Duration(seconds: 1), (timer) {
-      // Decode the base64-encoded data_frame and convert to hex format
-      String base64String = data[index1]['data_frame'];
+      if (response.isNotEmpty) {
+        return response.first as Map<String, dynamic>;
+      } else {
+        //debugPrint("No data found in the table.");
+      }
+    } catch (e) {
+      //debugPrint("Error fetching initial row: $e");
+    }
+    return null;
+  }
+
+  void subscribeToRealtimeUpdates() {
+    _supabase
+        .from('car_logs_2')
+        .stream(primaryKey: ['message_number']) // Use the table's primary key
+        .listen((rows) {
+      if (rows.isNotEmpty) {
+        final latestRow = rows.last;
+        //debugPrint("New row received: $latestRow");
+        handleNewRow(latestRow);
+      }
+    });
+  }
+
+  void handleNewRow(Map<String, dynamic> row) {
+    final base64String = row['data_frame'] as String;
+
+    try {
+      // Decode the base64-encoded data_frame and convert it to hex format
       List<int> bytes = base64.decode(base64String);
       String hexDataFrame =
           bytes.map((byte) => byte.toRadixString(16).padLeft(2, '0')).join();
 
-      // Access speed from specified hex index
-      String fuelLevelHexValue =
-          hexDataFrame.substring(fuelLevelHexIndex, fuelLevelHexIndex + 2);
-      double fuelLevelValue =
-          (int.parse(fuelLevelHexValue, radix: 16) * 0.392156862745098);
+      // Extract and calculate the vehicle speed
+      const int vehicleSpeedHexIndex = 6; // Hex index for speed value
+      String vehicleSpeedHexValue = hexDataFrame.substring(
+        vehicleSpeedHexIndex,
+        vehicleSpeedHexIndex + 2,
+      );
+      double vehicleSpeedValue =
+          (int.parse(vehicleSpeedHexValue, radix: 16) * 0.392156862745098).toDouble();
 
-      // Send the speed value as a double (convert or map to the appropriate range as needed)
-      sendPort.send(fuelLevelValue.toDouble());
+      //debugPrint("Decoded vehicle speed: $vehicleSpeedValue");
 
-      // Move to the next data frame
-      index1 = (index1 + 1) % data.length;
-    });
+      // Send the processed data (vehicle speed) to the isolate
+      if (speedisolate == null) {
+        //debugPrint("Spawning new isolate for speed updates...");
+        Isolate.spawn(
+          processSpeedData,
+           vehicleSpeedValue,
+        ).then((isolate) {
+          speedisolate = isolate;
+          //debugPrint("Isolate spawned successfully.");
+        }).catchError((error) {
+          //debugPrint("Error spawning isolate: $error");
+        });
+      } else {
+        //debugPrint("Sending processed data to existing isolate: $vehicleSpeedValue");
+        speedReceivePort.sendPort.send(vehicleSpeedValue);
+      }
+    } catch (e) {
+      //debugPrint("Error decoding data frame: $e");
+    }
+  }
+
+  static void processSpeedData(double vehicleSpeedValue) {
+    
+    try {
+      // Simulate periodic updates back to the main thread
+      Timer.periodic(const Duration(seconds: 2), (timer) {
+        //debugPrint("Sending processed speed back to main thread: $vehicleSpeedValue");
+      });
+    } catch (e) {
+      //debugPrint("Error in isolate: $e");
+    }
   }
 
   @override
   void dispose() {
-    fuelIsolate.kill(priority: Isolate.immediate);
+    //debugPrint("Disposing Speedometer...");
+    if (speedisolate != null) {
+      speedisolate?.kill(priority: Isolate.immediate);
+      speedisolate = null; // Reset to avoid any unexpected reuse
+    }
+    speedReceivePort.close();
     super.dispose();
   }
 
