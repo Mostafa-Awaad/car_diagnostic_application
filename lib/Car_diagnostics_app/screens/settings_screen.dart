@@ -29,11 +29,10 @@ class SettingsScreen extends StatelessWidget {
                 Spacer(),
                 Text(
                   'MODEL 0',
-                  style: TextStyle(fontSize: 25, 
-                  fontWeight: FontWeight.w200,
-                  fontFamily: 'Orbitron'
-                   ),
-                  
+                  style: TextStyle(
+                      fontSize: 25,
+                      fontWeight: FontWeight.w200,
+                      fontFamily: 'Orbitron'),
                 ),
               ],
             ),
@@ -87,82 +86,153 @@ class SettingsScreen extends StatelessWidget {
                               height: 650,
                               child: Stack(
                                 children: [
-                                  Positioned.fill(
-                                    child: Center(
-                                      child: Container(
-                                        width: 230,
-                                        height: 230,
-                                        decoration: BoxDecoration(
-                                            shape: BoxShape.circle,
-                                            color: kPrimaryColor),
-                                      ),
-                                    ),
-                                  ),
-                                  Center(
-                                    child: SizedBox(width: 350, height: 350, child: CustomRipple()),
-                                  ),
-                                  Positioned(
-                                      top: 100,
-                                      right: 40,
-                                      child: SizedBox(
-                                          width: 100,
-                                          height: 100,
-                                          child: CustomRipple())),
-                                  Positioned(
-                                      top: 115,
-                                      right: 55,
-                                      child: SizedBox(
-                                          width: 70,
-                                          height: 70,
-                                          child: CustomRipple())),
-                                  Positioned(
-                                      top: 100,
-                                      left: 40,
-                                      child: SizedBox(
-                                          width: 100,
-                                          height: 100,
-                                          child: CustomRipple())),
-                                  Positioned(
-                                      top: 115,
-                                      left: 55,
-                                      child: SizedBox(
-                                          width: 70,
-                                          height: 70,
-                                          child: CustomRipple())),
-                                  Positioned(
-                                      bottom: 100,
-                                      right: 40,
-                                      child: SizedBox(
-                                          width: 100,
-                                          height: 100,
-                                          child: CustomRipple())),
-                                  Positioned(
-                                      bottom: 115,
-                                      right: 55,
-                                      child: SizedBox(
-                                          width: 70,
-                                          height: 70,
-                                          child: CustomRipple())),
-                                  Positioned(
-                                      bottom: 100,
-                                      left: 40,
-                                      child: SizedBox(
-                                          width: 100,
-                                          height: 100,
-                                          child: CustomRipple())),
-                                  Positioned(
-                                      bottom: 115,
-                                      left: 55,
-                                      child: SizedBox(
-                                          width: 70,
-                                          height: 70,
-                                          child: CustomRipple())),
+                                  // Positioned.fill(
+                                  //   child: Center(
+                                  //     child: Container(
+                                  //       width: 230,
+                                  //       height: 230,
+                                  //       decoration: BoxDecoration(
+                                  //           shape: BoxShape.circle,
+                                  //           color: kPrimaryColor),
+                                  //     ),
+                                  //   ),
+                                  // ),
+                                  // Center(
+                                  //   child: SizedBox(
+                                  //       width: 350,
+                                  //       height: 350,
+                                  //       child: CustomRipple()),
+                                  // ),
+                                  // Positioned(
+                                  //     top: 100,
+                                  //     right: 40,
+                                  //     child: SizedBox(
+                                  //         width: 100,
+                                  //         height: 100,
+                                  //         child: CustomRipple())),
+                                  // Positioned(
+                                  //     top: 115,
+                                  //     right: 55,
+                                  //     child: SizedBox(
+                                  //         width: 70,
+                                  //         height: 70,
+                                  //         child: CustomRipple())),
+                                  // Positioned(
+                                  //     top: 100,
+                                  //     left: 40,
+                                  //     child: SizedBox(
+                                  //         width: 100,
+                                  //         height: 100,
+                                  //         child: CustomRipple())),
+                                  // Positioned(
+                                  //     top: 115,
+                                  //     left: 55,
+                                  //     child: SizedBox(
+                                  //         width: 70,
+                                  //         height: 70,
+                                  //         child: CustomRipple())),
+                                  // Positioned(
+                                  //     bottom: 100,
+                                  //     right: 40,
+                                  //     child: SizedBox(
+                                  //         width: 100,
+                                  //         height: 100,
+                                  //         child: CustomRipple())),
+                                  // Positioned(
+                                  //     bottom: 115,
+                                  //     right: 55,
+                                  //     child: SizedBox(
+                                  //         width: 70,
+                                  //         height: 70,
+                                  //         child: CustomRipple())),
+                                  // Positioned(
+                                  //     bottom: 100,
+                                  //     left: 40,
+                                  //     child: SizedBox(
+                                  //         width: 100,
+                                  //         height: 100,
+                                  //         child: CustomRipple())),
+                                  // Positioned(
+                                  //   bottom: 115,
+                                  //   left: 55,
+                                  //   child: SizedBox(
+                                  //     width: 70,
+                                  //     height: 70,
+                                  //     child: CustomRipple(),
+                                  //   ),
+                                  // ),
                                   Center(
                                     child: SizedBox(
                                       height: 650,
-                                      child: Image.asset(
-                                        'lib/Car_diagnostics_app/images/bird_view_tesla.png',
-                                        fit: BoxFit.contain,
+                                      child: Center(
+                                        child: Stack(
+                                          children: [
+                                            Positioned(
+                                                top: 100,
+                                                right: 40,
+                                                child: SizedBox(
+                                                    width: 100,
+                                                    height: 100,
+                                                    child: CustomRipple())),
+                                            Positioned(
+                                                top: 115,
+                                                right: 55,
+                                                child: SizedBox(
+                                                    width: 70,
+                                                    height: 70,
+                                                    child: CustomRipple())),
+                                            Positioned(
+                                                top: 100,
+                                                left: 40,
+                                                child: SizedBox(
+                                                    width: 100,
+                                                    height: 100,
+                                                    child: CustomRipple())),
+                                            Positioned(
+                                                top: 115,
+                                                left: 55,
+                                                child: SizedBox(
+                                                    width: 70,
+                                                    height: 70,
+                                                    child: CustomRipple())),
+                                            Positioned(
+                                                bottom: 100,
+                                                right: 40,
+                                                child: SizedBox(
+                                                    width: 100,
+                                                    height: 100,
+                                                    child: CustomRipple())),
+                                            Positioned(
+                                                bottom: 115,
+                                                right: 55,
+                                                child: SizedBox(
+                                                    width: 70,
+                                                    height: 70,
+                                                    child: CustomRipple())),
+                                            Positioned(
+                                                bottom: 100,
+                                                left: 40,
+                                                child: SizedBox(
+                                                    width: 100,
+                                                    height: 100,
+                                                    child: CustomRipple())),
+                                            Positioned(
+                                              bottom: 115,
+                                              left: 55,
+                                              child: SizedBox(
+                                                width: 70,
+                                                height: 70,
+                                                child: CustomRipple(),
+                                              ),
+                                            ),
+                                            Positioned(
+                                              child: Image.asset(
+                                                'lib/Car_diagnostics_app/images/bird_view_tesla.png',
+                                                fit: BoxFit.contain,
+                                              ),
+                                            ),
+                                          ],
+                                        ),
                                       ),
                                     ),
                                   ),

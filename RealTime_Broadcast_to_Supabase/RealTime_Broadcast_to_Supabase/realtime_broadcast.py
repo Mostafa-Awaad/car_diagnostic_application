@@ -8,7 +8,11 @@ import random
 import cantools
 import binascii  # for hex to binary conversion
 import base64
+import dotenv
+from dotenv import load_dotenv
 
+# Function from the python-dotenv library used to load environment variables from a .env file into the environment. These variables can then be accessed using os.environ
+load_dotenv()
 # Retrieving the value of environment variables of the supabase
 supabase_url = os.environ.get("URL")
 supabase_anon_key = os.environ.get("KEY")
