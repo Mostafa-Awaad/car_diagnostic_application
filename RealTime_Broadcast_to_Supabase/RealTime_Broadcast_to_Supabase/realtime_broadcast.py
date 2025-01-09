@@ -11,7 +11,6 @@ import base64
 import dotenv
 from dotenv import load_dotenv
 
-# Function from the python-dotenv library used to load environment variables from a .env file into the environment. These variables can then be accessed using os.environ
 load_dotenv()
 # Retrieving the value of environment variables of the supabase
 supabase_url = os.environ.get("URL")
@@ -27,6 +26,30 @@ dbc = cantools.database.load_file('Custom_dbc2.dbc')
 message = dbc.get_message_by_name('OBD2')
 no_of_rows = 10000
 
+def get_max_message_number():
+    """
+    Fetches the maximum message_number from the Supabase table.
+    Returns 0 if the table is empty or an error occurs.
+    """
+    try:
+        # Query to fetch the maximum message_number
+        response = supabase.table("car_logs_2").select("message_number").order("message_number", desc=True).limit(1).execute()
+
+        # Access the 'data' attribute of the response
+        data = response.data
+
+        # Check if data exists and extract the max message_number
+        if data and len(data) > 0:
+            return int(data[0]["message_number"]) + 1
+        else:
+            return 0  # Return 0 if no rows exist
+    except Exception as e:
+        print(f"Error fetching max message_number: {e}")
+        return 0
+
+
+
+    
 # Function to parse the data of the last line in asc file 
 def parse_last_line_asc_file (file_path):
     with open(file_path, 'r') as file:
@@ -90,13 +113,21 @@ def insert_into_supabase (log_data):
         )
 
 
+
+# Fetch the starting message number
+starting_message_number = get_max_message_number() +1
+
+# Number of rows to add
+no_of_rows = 10000
+
 # Generate CAN messages and save to .asc file
-with open('vehicle_speed_log.asc', 'w') as log_file:
+with open('vehicle_speed_log.asc', 'a') as log_file:
     # Initiating writing in asc file
     log_file.write("date {}\n".format(datetime.now().strftime('%a %b %d %H:%M:%S.%f %Y')))
     log_file.write("Begin Triggerblock\n")
 
-for i in range(0, no_of_rows):
+# Append new rows to the .asc file
+for i in range(starting_message_number, no_of_rows):
     # Generate CAN messages and save to .asc file
     with open('vehicle_speed_log.asc', 'a') as log_file:
         # Simulating the different signals in the dbc file
@@ -109,6 +140,9 @@ for i in range(0, no_of_rows):
         engine_load = random.randint(0, 100)
         timestamp = datetime.now().timestamp() + i * 0.1
 
+        # Calculate the current message number
+        current_message_number = i
+
         # Ensure the signal name is correct
         try:
             encoded_message = message.encode({  'S01PID0D_VehicleSpeed'     : speed,
@@ -119,19 +153,17 @@ for i in range(0, no_of_rows):
                                                 'S01PID21_DistanceMILOn'    : new_distance,
                                                 'S01PID04_CalcEngineLoad'   : engine_load})
             
-            log_file.writelines(f"{i+1}\t {timestamp}\t1\t {message.frame_id:X}\t Tx -\t {len(encoded_message)}\t {'\t'.join(f'{b:02X}' for b in encoded_message)}\n")
+            log_file.writelines(f"{current_message_number}\t {timestamp}\t1\t {message.frame_id:X}\t Tx -\t {len(encoded_message)}\t {'\t'.join(f'{b:02X}' for b in encoded_message)}\n")
         except cantools.database.errors.EncodeError as e:
             print(f"Error encoding message at index {i}: {e}")  # Handle encoding errors
         
-    #delay for 2 seconds
+    # Delay for 2 seconds
     time.sleep(2)
     new_last_line = parse_last_line_asc_file('vehicle_speed_log.asc')
     insert_into_supabase(new_last_line)
 
 # Ending writing in the asc file
-log_file.write("End TriggerBlock\n")
-print("ASC file created: log_file.asc")
-        
+with open('vehicle_speed_log.asc', 'a') as log_file:
+    log_file.write("End TriggerBlock\n")
 
-
-
+print("ASC file updated successfully.")

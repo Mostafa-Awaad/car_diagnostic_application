@@ -54,7 +54,7 @@ class SettingsScreen extends StatelessWidget {
                     height: 600,
                     child: Stack(
                       children: [
-                        Positioned(
+                        const Positioned(
                           top: 0,
                           left: 0,
                           child: Text(
@@ -66,13 +66,13 @@ class SettingsScreen extends StatelessWidget {
                           top: 0,
                           right: 0,
                           child: Container(
-                              decoration: BoxDecoration(
+                              decoration: const BoxDecoration(
                                   shape: BoxShape.circle,
                                   gradient: buttonGradient),
                               child: IconButton(
                                   iconSize: 35,
                                   onPressed: () {},
-                                  icon: Icon(
+                                  icon: const Icon(
                                     Icons.replay_rounded,
                                     color: Colors.white,
                                   ))),
@@ -86,81 +86,6 @@ class SettingsScreen extends StatelessWidget {
                               height: 650,
                               child: Stack(
                                 children: [
-                                  // Positioned.fill(
-                                  //   child: Center(
-                                  //     child: Container(
-                                  //       width: 230,
-                                  //       height: 230,
-                                  //       decoration: BoxDecoration(
-                                  //           shape: BoxShape.circle,
-                                  //           color: kPrimaryColor),
-                                  //     ),
-                                  //   ),
-                                  // ),
-                                  // Center(
-                                  //   child: SizedBox(
-                                  //       width: 350,
-                                  //       height: 350,
-                                  //       child: CustomRipple()),
-                                  // ),
-                                  // Positioned(
-                                  //     top: 100,
-                                  //     right: 40,
-                                  //     child: SizedBox(
-                                  //         width: 100,
-                                  //         height: 100,
-                                  //         child: CustomRipple())),
-                                  // Positioned(
-                                  //     top: 115,
-                                  //     right: 55,
-                                  //     child: SizedBox(
-                                  //         width: 70,
-                                  //         height: 70,
-                                  //         child: CustomRipple())),
-                                  // Positioned(
-                                  //     top: 100,
-                                  //     left: 40,
-                                  //     child: SizedBox(
-                                  //         width: 100,
-                                  //         height: 100,
-                                  //         child: CustomRipple())),
-                                  // Positioned(
-                                  //     top: 115,
-                                  //     left: 55,
-                                  //     child: SizedBox(
-                                  //         width: 70,
-                                  //         height: 70,
-                                  //         child: CustomRipple())),
-                                  // Positioned(
-                                  //     bottom: 100,
-                                  //     right: 40,
-                                  //     child: SizedBox(
-                                  //         width: 100,
-                                  //         height: 100,
-                                  //         child: CustomRipple())),
-                                  // Positioned(
-                                  //     bottom: 115,
-                                  //     right: 55,
-                                  //     child: SizedBox(
-                                  //         width: 70,
-                                  //         height: 70,
-                                  //         child: CustomRipple())),
-                                  // Positioned(
-                                  //     bottom: 100,
-                                  //     left: 40,
-                                  //     child: SizedBox(
-                                  //         width: 100,
-                                  //         height: 100,
-                                  //         child: CustomRipple())),
-                                  // Positioned(
-                                  //   bottom: 115,
-                                  //   left: 55,
-                                  //   child: SizedBox(
-                                  //     width: 70,
-                                  //     height: 70,
-                                  //     child: CustomRipple(),
-                                  //   ),
-                                  // ),
                                   Center(
                                     child: SizedBox(
                                       height: 650,
@@ -242,9 +167,9 @@ class SettingsScreen extends StatelessWidget {
                       ],
                     ),
                   ),
-                  Text('Battery Health',
+                  const Text('Battery Health',
                       style: TextStyle(fontWeight: FontWeight.bold)),
-                  SizedBox(
+                  const SizedBox(
                     height: 20,
                   ),
                   LinearPercentIndicator(
@@ -253,7 +178,7 @@ class SettingsScreen extends StatelessWidget {
                     percent: 0.8,
                     lineHeight: 20,
                     animationDuration: 2500,
-                    center: Text('90.0%'),
+                    center: const Text('90.0%'),
                     linearGradient: LinearGradient(
                         colors: [kPrimaryColor, kSecondaryColor]),
                   ),
