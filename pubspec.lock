@@ -232,6 +232,22 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "2.4.0"
+  glassmorphism:
+    dependency: "direct main"
+    description:
+      name: glassmorphism
+      sha256: c0f65ea2681d4ee6d4125b947946d983335cd44765e835cdc039894b076a6e31
+      url: "https://pub.dev"
+    source: hosted
+    version: "3.0.0"
+  glossy:
+    dependency: "direct main"
+    description:
+      name: glossy
+      sha256: "70c7626430a23b903755766d161f024d93334f2b06d7b96f6b6c7204aa0b8941"
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.0.5"
   gotrue:
     dependency: transitive
     description:
