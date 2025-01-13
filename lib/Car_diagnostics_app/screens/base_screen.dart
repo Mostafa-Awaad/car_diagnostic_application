@@ -119,10 +119,18 @@ class _BaseScreenState extends State<BaseScreen> {
           ),
         ),
       ),
-      body: Container(
+      body:
+      Container(
         decoration: BoxDecoration(
           gradient: kBackGroundGradient,
         ),
+      // DecoratedBox( 
+      //     // BoxDecoration takes the image
+      //     decoration: BoxDecoration( 
+      //       // Image set to background of the body
+      //       image: DecorationImage( 
+      //           image: AssetImage("lib/Car_diagnostics_app/images/futuristic_background4.jpg"), fit: BoxFit.cover),
+      //     ),
         child: IndexedStack(
           index: _selectedIndex,
           children: [

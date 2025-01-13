@@ -1,4 +1,5 @@
 import 'package:demo_car_diagnostic_application/Car_diagnostics_app/widgets/fuel_level.dart';
+import 'package:demo_car_diagnostic_application/Car_diagnostics_app/widgets/glass_card.dart';
 import 'package:demo_car_diagnostic_application/Car_diagnostics_app/widgets/temperature_eng_coolant.dart';
 import 'package:flutter/material.dart';
 
@@ -32,54 +33,8 @@ class _BottomCardGridState extends State<BottomCardGrid> {
           ),
           children: [
             // Temperature Card
-            Card(
-              color: Colors.grey[850],
-              elevation: 10,
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(15.0),
-              ),
-              child: Padding(
-                padding: const EdgeInsets.all(10.0),
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    ShaderMask(
-                      shaderCallback: (bounds) => const LinearGradient(
-                        colors: [Colors.blue, Colors.white],
-                        begin: Alignment.topLeft,
-                        end: Alignment.bottomRight,
-                      ).createShader(bounds),
-                      child: Text(
-                        'Engine',
-                        style: TextStyle(
-                          fontWeight: FontWeight.bold,
-                          fontSize: screenWidth * 0.045,
-                          color: Colors.white,
-                        ),
-                      ),
-                    ),
-                    ShaderMask(
-                      shaderCallback: (bounds) => const LinearGradient(
-                        colors: [Colors.blue, Colors.white],
-                        begin: Alignment.topLeft,
-                        end: Alignment.bottomRight,
-                      ).createShader(bounds),
-                      child: Text(
-                        'Coolant Temp ',
-                        style: TextStyle(
-                          fontWeight: FontWeight.bold,
-                          fontSize: screenWidth * 0.04,
-                          color: Colors.white,
-                        ),
-                      ),
-                    ),
-                    const SizedBox(height: 30),
-                    const Flexible(child: Center(child: TemperatureEngCoolant())),
-                    const SizedBox(height: 20),
-                  ],
-                ),
-              ),
-            ),
+            GlassCard(
+                customClass: TemperatureEngCoolant(), screenWidth: screenWidth),
 
             // Fuel Level Card
             Card(
@@ -103,13 +58,17 @@ class _BottomCardGridState extends State<BottomCardGrid> {
                         'Fuel Level',
                         style: TextStyle(
                           fontWeight: FontWeight.bold,
-                          fontSize: screenWidth * 0.045,
+                          fontSize: screenWidth * 0.04,
                           color: Colors.white,
                         ),
                       ),
                     ),
                     const SizedBox(height: 50),
-                    const Flexible(child: Center(child: FuelLevel())),
+                    const Flexible(
+                      child: Center(
+                        child: FuelLevel(),
+                      ),
+                    ),
                     const SizedBox(height: 20),
                   ],
                 ),
