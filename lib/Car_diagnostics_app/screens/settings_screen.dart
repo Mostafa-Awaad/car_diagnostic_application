@@ -1,9 +1,10 @@
+import 'package:demo_car_diagnostic_application/Car_diagnostics_app/widgets/tire_pressure.dart';
 import 'package:flutter/material.dart';
 import 'package:demo_car_diagnostic_application/Car_diagnostics_app/configs/colors.dart';
 import 'package:percent_indicator/linear_percent_indicator.dart';
 
 class SettingsScreen extends StatelessWidget {
-  const SettingsScreen({Key? key}) : super(key: key);
+  const SettingsScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -18,16 +19,16 @@ class SettingsScreen extends StatelessWidget {
                     onPressed: () {},
                     iconSize: 30,
                     splashRadius: 25,
-                    icon: Icon(
+                    icon: const Icon(
                       Icons.arrow_back_ios_outlined,
                       color: Colors.white,
                     )),
-                Text(
-                  'Diagnostics',
+                const Text(
+                  'Vehicle Status',
                   style: TextStyle(fontSize: 25),
                 ),
-                Spacer(),
-                Text(
+                const Spacer(),
+                const Text(
                   'MODEL 0',
                   style: TextStyle(
                       fontSize: 25,
@@ -36,7 +37,7 @@ class SettingsScreen extends StatelessWidget {
                 ),
               ],
             ),
-            SizedBox(
+            const SizedBox(
               height: 20.0,
             ),
             Container(
@@ -57,9 +58,21 @@ class SettingsScreen extends StatelessWidget {
                         const Positioned(
                           top: 0,
                           left: 0,
-                          child: Text(
-                            'Overall Health',
-                            style: TextStyle(fontWeight: FontWeight.bold),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                'Tires Pressure',
+                                style: TextStyle(
+                                    fontWeight: FontWeight.bold, fontSize: 18),
+                              ),
+                              Text(
+                                'Recommended: Front 35 psi | Rear 35 psi',
+                                style: TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                    color: Color.fromARGB(255, 145, 144, 144)),
+                              )
+                            ],
                           ),
                         ),
                         Positioned(
@@ -92,56 +105,71 @@ class SettingsScreen extends StatelessWidget {
                                       child: Center(
                                         child: Stack(
                                           children: [
-                                            Positioned(
-                                                top: 100,
-                                                right: 40,
-                                                child: SizedBox(
-                                                    width: 100,
-                                                    height: 100,
-                                                    child: CustomRipple())),
-                                            Positioned(
-                                                top: 115,
-                                                right: 55,
-                                                child: SizedBox(
-                                                    width: 70,
-                                                    height: 70,
-                                                    child: CustomRipple())),
-                                            Positioned(
+                                            const Positioned(
+                                              top: 100,
+                                              right: 40,
+                                              child: SizedBox(
+                                                width: 100,
+                                                height: 100,
+                                                child: CustomRipple(),
+                                              ),
+                                            ),
+                                            const Positioned(
+                                              top: 115,
+                                              right: 55,
+                                              child: SizedBox(
+                                                width: 70,
+                                                height: 70,
+                                                child: CustomRipple(),
+                                              ),
+                                            ),
+                                            //Text for car tire pressure
+                                            const Positioned(
+                                              top: 70,
+                                              right: 0.5,
+                                              child: SizedBox(
+                                                width: 70,
+                                                height: 70,
+                                                child: TirePressure(),
+                                              ),
+                                            ),
+
+                                            const Positioned(
                                                 top: 100,
                                                 left: 40,
                                                 child: SizedBox(
                                                     width: 100,
                                                     height: 100,
                                                     child: CustomRipple())),
-                                            Positioned(
+                                            const Positioned(
                                                 top: 115,
                                                 left: 55,
                                                 child: SizedBox(
                                                     width: 70,
                                                     height: 70,
                                                     child: CustomRipple())),
-                                            Positioned(
+                                            const Positioned(
                                                 bottom: 100,
                                                 right: 40,
                                                 child: SizedBox(
                                                     width: 100,
                                                     height: 100,
                                                     child: CustomRipple())),
-                                            Positioned(
+                                            const Positioned(
                                                 bottom: 115,
                                                 right: 55,
                                                 child: SizedBox(
                                                     width: 70,
                                                     height: 70,
                                                     child: CustomRipple())),
-                                            Positioned(
+                                            const Positioned(
                                                 bottom: 100,
                                                 left: 40,
                                                 child: SizedBox(
                                                     width: 100,
                                                     height: 100,
                                                     child: CustomRipple())),
-                                            Positioned(
+                                            const Positioned(
                                               bottom: 115,
                                               left: 55,
                                               child: SizedBox(
@@ -179,11 +207,11 @@ class SettingsScreen extends StatelessWidget {
                     lineHeight: 20,
                     animationDuration: 2500,
                     center: const Text('90.0%'),
-                    linearGradient: LinearGradient(
+                    linearGradient: const LinearGradient(
                         colors: [kPrimaryColor, kSecondaryColor]),
                   ),
-                  Padding(
-                    padding: const EdgeInsets.only(top: 20, bottom: 20),
+                  const Padding(
+                    padding: EdgeInsets.only(top: 20, bottom: 20),
                     child: Text('Sensors',
                         style: TextStyle(fontWeight: FontWeight.bold)),
                   ),
@@ -191,25 +219,25 @@ class SettingsScreen extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: [
                       Sensor(
-                        sensor_width: 60,
+                        sensorWidth: 60,
                         heigth: 120,
                         value: 0.8,
                         label: 'Motors',
                       ),
                       Sensor(
-                        sensor_width: 60,
+                        sensorWidth: 60,
                         heigth: 120,
                         value: 0.4,
                         label: 'Batery Temp',
                       ),
                       Sensor(
-                        sensor_width: 60,
+                        sensorWidth: 60,
                         heigth: 120,
                         value: 0.9,
                         label: 'Brakes',
                       ),
                       Sensor(
-                        sensor_width: 60,
+                        sensorWidth: 60,
                         heigth: 120,
                         value: 0.6,
                         label: 'Suspentions',
@@ -228,17 +256,17 @@ class SettingsScreen extends StatelessWidget {
 
 class Sensor extends StatelessWidget {
   const Sensor({
-    Key? key,
+    super.key,
     required this.value,
     required this.label,
     required this.heigth,
-    required this.sensor_width,
-  }) : super(key: key);
+    required this.sensorWidth,
+  });
 
   final double value;
   final double heigth;
   final String label;
-  final double sensor_width;
+  final double sensorWidth;
 
   @override
   Widget build(BuildContext context) {
@@ -247,7 +275,7 @@ class Sensor extends StatelessWidget {
         ClipRRect(
             borderRadius: BorderRadius.circular(10),
             child: Container(
-              width: sensor_width,
+              width: sensorWidth,
               height: heigth,
               color: kProgressBackGroundColor.withOpacity(0.5),
               child: Column(
@@ -264,7 +292,7 @@ class Sensor extends StatelessWidget {
                 ],
               ),
             )),
-        SizedBox(
+        const SizedBox(
           height: 5,
         ),
         Text(label)
@@ -274,10 +302,10 @@ class Sensor extends StatelessWidget {
 }
 
 class CustomRipple extends StatefulWidget {
-  CustomRipple({Key? key}) : super(key: key);
+  const CustomRipple({super.key});
 
   @override
-  _CustomRippleState createState() => _CustomRippleState();
+  State<CustomRipple> createState() => _CustomRippleState();
 }
 
 class _CustomRippleState extends State<CustomRipple>
@@ -285,7 +313,7 @@ class _CustomRippleState extends State<CustomRipple>
   @override
   void initState() {
     _controller = AnimationController(
-        vsync: this, duration: Duration(milliseconds: 1200));
+        vsync: this, duration: const Duration(milliseconds: 1200));
     _animation = Tween<double>(begin: 0.4, end: 0.8).animate(_controller)
       ..addListener(() {
         setState(() {});
