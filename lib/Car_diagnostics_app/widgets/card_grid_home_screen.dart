@@ -2,6 +2,15 @@ import 'package:demo_car_diagnostic_application/Car_diagnostics_app/widgets/fuel
 import 'package:demo_car_diagnostic_application/Car_diagnostics_app/widgets/glass_card.dart';
 import 'package:demo_car_diagnostic_application/Car_diagnostics_app/widgets/temperature_eng_coolant.dart';
 import 'package:flutter/material.dart';
+enum Signals {tempEngCoolant, fuelLevel }
+final text1 = {
+  Signals.tempEngCoolant: "Engine",
+  Signals. fuelLevel: "Fuel",
+};
+final text2 = {
+  Signals.tempEngCoolant: "Coolant Temp",
+  Signals. fuelLevel: "Level"
+};
 
 class BottomCardGrid extends StatefulWidget {
   const BottomCardGrid({super.key});
@@ -11,7 +20,7 @@ class BottomCardGrid extends StatefulWidget {
 
 class _BottomCardGridState extends State<BottomCardGrid> {
   double fuelLevel = 80;
-
+  
   // Example fuel level in percentage
   @override
   Widget build(BuildContext context) {
@@ -34,46 +43,46 @@ class _BottomCardGridState extends State<BottomCardGrid> {
           children: [
             // Temperature Card
             GlassCard(
-                customClass: TemperatureEngCoolant(), screenWidth: screenWidth),
-
+                customClass: TemperatureEngCoolant(), screenWidth: screenWidth, text1: text1[Signals.tempEngCoolant].toString(), text2: text2[Signals.tempEngCoolant].toString()),
+            GlassCard(customClass: FuelLevel(), screenWidth: screenWidth, text1: text1[Signals.fuelLevel].toString(), text2: text2[Signals.fuelLevel].toString()),
             // Fuel Level Card
-            Card(
-              color: Colors.grey[850],
-              elevation: 10,
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(15.0),
-              ),
-              child: Padding(
-                padding: const EdgeInsets.all(10.0),
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    ShaderMask(
-                      shaderCallback: (bounds) => const LinearGradient(
-                        colors: [Colors.blue, Colors.white],
-                        begin: Alignment.topLeft,
-                        end: Alignment.bottomRight,
-                      ).createShader(bounds),
-                      child: Text(
-                        'Fuel Level',
-                        style: TextStyle(
-                          fontWeight: FontWeight.bold,
-                          fontSize: screenWidth * 0.04,
-                          color: Colors.white,
-                        ),
-                      ),
-                    ),
-                    const SizedBox(height: 50),
-                    const Flexible(
-                      child: Center(
-                        child: FuelLevel(),
-                      ),
-                    ),
-                    const SizedBox(height: 20),
-                  ],
-                ),
-              ),
-            ),
+            // Card(
+            //   color: Colors.grey[850],
+            //   elevation: 10,
+            //   shape: RoundedRectangleBorder(
+            //     borderRadius: BorderRadius.circular(15.0),
+            //   ),
+            //   child: Padding(
+            //     padding: const EdgeInsets.all(10.0),
+            //     child: Column(
+            //       mainAxisSize: MainAxisSize.min,
+            //       children: [
+            //         ShaderMask(
+            //           shaderCallback: (bounds) => const LinearGradient(
+            //             colors: [Colors.blue, Colors.white],
+            //             begin: Alignment.topLeft,
+            //             end: Alignment.bottomRight,
+            //           ).createShader(bounds),
+            //           child: Text(
+            //             'Fuel Level',
+            //             style: TextStyle(
+            //               fontWeight: FontWeight.bold,
+            //               fontSize: screenWidth * 0.04,
+            //               color: Colors.white,
+            //             ),
+            //           ),
+            //         ),
+            //         const SizedBox(height: 50),
+            //         const Flexible(
+            //           child: Center(
+            //             child: FuelLevel(),
+            //           ),
+            //         ),
+            //         const SizedBox(height: 20),
+            //       ],
+            //     ),
+            //   ),
+            // ),
           ],
         ),
       ),
