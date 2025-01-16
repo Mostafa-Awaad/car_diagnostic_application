@@ -1,20 +1,13 @@
 import 'dart:ui';
-import 'package:demo_car_diagnostic_application/Car_diagnostics_app/widgets/fuel_level.dart';
-import 'package:demo_car_diagnostic_application/Car_diagnostics_app/widgets/temperature_eng_coolant.dart';
 import 'package:flutter/material.dart';
 
-final text1 = {
-  TemperatureEngCoolant(): "Engine",
-  FuelLevel(): "Fuel",
-};
-final text2 = {
-  TemperatureEngCoolant() : "Coolant Temp",
-  FuelLevel(): "Level"
-};
+
 class GlassCard extends StatelessWidget {
-  GlassCard({super.key, required this.screenWidth, required this.customClass});
+  GlassCard({super.key, required this.screenWidth, required this.customClass, required this.text1, required this.text2});
   final double screenWidth;
   final Widget customClass;
+  final String text1;
+  final String text2;
   @override
   Widget build(BuildContext context) {
     return Card(
@@ -55,7 +48,7 @@ class GlassCard extends StatelessWidget {
                         end: Alignment.bottomRight,
                       ).createShader(bounds),
                       child: Text(
-                        'Engine',
+                        text1,
                         style: TextStyle(
                           fontWeight: FontWeight.bold,
                           fontSize: screenWidth * 0.04,
@@ -70,7 +63,7 @@ class GlassCard extends StatelessWidget {
                         end: Alignment.bottomRight,
                       ).createShader(bounds),
                       child: Text(
-                        'Coolant Temp ',
+                        text2,
                         style: TextStyle(
                           fontWeight: FontWeight.bold,
                           fontSize: screenWidth * 0.04,

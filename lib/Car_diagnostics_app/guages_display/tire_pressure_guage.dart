@@ -1,6 +1,5 @@
+import 'package:demo_car_diagnostic_application/Car_diagnostics_app/widgets/tire_pressure_val_container.dart';
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
-
 
 class TirePressureGuage extends StatelessWidget {
   const TirePressureGuage(
@@ -9,17 +8,11 @@ class TirePressureGuage extends StatelessWidget {
       required this.tirePressureColor});
   final double currentTirePressure;
   final Color tirePressureColor;
+  Color getColor (){
+    return tirePressureColor;
+  }
   @override
   Widget build(BuildContext context) {
-    return LayoutBuilder(
-      builder: (context, constraints) {
-        return Text(
-          '$currentTirePressure',
-          style: GoogleFonts.notoSansIndicSiyaqNumbers(
-              fontWeight: FontWeight.bold,
-              color: tirePressureColor),
-        );
-      },
-    );
+    return TirePressureValContainer(currentTirePressure: currentTirePressure, tirePressureColor: tirePressureColor);
   }
 }

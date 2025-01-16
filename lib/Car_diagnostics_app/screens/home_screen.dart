@@ -1,7 +1,6 @@
 import 'package:demo_car_diagnostic_application/Car_diagnostics_app/widgets/card_grid_home_screen.dart';
 import 'package:demo_car_diagnostic_application/Car_diagnostics_app/widgets/speedometer.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:demo_car_diagnostic_application/Car_diagnostics_app/configs/colors.dart';
 
 class HomeScreen extends StatelessWidget {
@@ -24,7 +23,8 @@ class HomeScreen extends StatelessWidget {
                       iconSize: 50,
                       splashRadius: 25,
                       onPressed: () {},
-                      icon: const Icon(Icons.menu_rounded, color: kPrimaryColor),
+                      icon:
+                          const Icon(Icons.menu_rounded, color: kPrimaryColor),
                     ),
                     const Spacer(),
                     Stack(
@@ -81,8 +81,10 @@ class HomeScreen extends StatelessWidget {
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  SvgPicture.asset(
-                      'lib/Car_diagnostics_app/images/lighting.svg'),
+                  const Icon(Icons.flash_on, color: Colors.blue, size: 30),
+                  SizedBox(
+                    width: 10,
+                  ),
                   Padding(
                     padding: const EdgeInsets.only(right: 25),
                     child: ShaderMask(

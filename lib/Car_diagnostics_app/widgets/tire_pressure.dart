@@ -78,10 +78,10 @@ class _TirePressureState extends State<TirePressure> {
   @override
   Widget build(BuildContext context) {
     //Changing the color of the text showing the speed value depending on its range
-    Color speedColor = (currentTirePressure <= 36) && (currentTirePressure >=28)
+    Color tirePressureValueColor = (currentTirePressure <= 36) && (currentTirePressure >=28)
         ? Colors.lightBlue
         : const Color.fromARGB(255, 235, 101, 101);
 
-    return TirePressureGuage(currentTirePressure: currentTirePressure, tirePressureColor: speedColor);
+    return TirePressureGuage(currentTirePressure: currentTirePressure, tirePressureColor: tirePressureValueColor);
   }
 }
