@@ -125,7 +125,34 @@ class SettingsScreen extends StatelessWidget {
                                             ),
                                             //Text for car tire pressure
                                             const Positioned(
-                                              top: 70,
+                                              top: 50,
+                                              right: 0.5,
+                                              child: SizedBox(
+                                                width: 70,
+                                                height: 70,
+                                                child: TirePressure(),
+                                              ),
+                                            ),
+                                            const Positioned(
+                                              top: 50,
+                                              left: 0.5,
+                                              child: SizedBox(
+                                                width: 70,
+                                                height: 70,
+                                                child: TirePressure(),
+                                              ),
+                                            ),
+                                            const Positioned(
+                                              bottom: 50,
+                                              left: 0.5,
+                                              child: SizedBox(
+                                                width: 70,
+                                                height: 70,
+                                                child: TirePressure(),
+                                              ),
+                                            ),
+                                            const Positioned(
+                                              bottom: 50,
                                               right: 0.5,
                                               child: SizedBox(
                                                 width: 70,

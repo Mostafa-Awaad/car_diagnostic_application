@@ -14,7 +14,7 @@ class TirePressureValContainer extends StatelessWidget {
     return ClipRRect(
       borderRadius: BorderRadius.circular(20.0),
       child: Container(
-        padding: EdgeInsets.all(16.0),
+        padding: EdgeInsets.all(14.0),
         decoration: BoxDecoration(
           color: Colors.white.withOpacity(0.2),
           borderRadius: BorderRadius.circular(20.0),
