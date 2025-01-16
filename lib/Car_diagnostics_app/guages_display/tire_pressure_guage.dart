@@ -8,6 +8,9 @@ class TirePressureGuage extends StatelessWidget {
       required this.tirePressureColor});
   final double currentTirePressure;
   final Color tirePressureColor;
+  Color getColor (){
+    return tirePressureColor;
+  }
   @override
   Widget build(BuildContext context) {
     return TirePressureValContainer(currentTirePressure: currentTirePressure, tirePressureColor: tirePressureColor);
