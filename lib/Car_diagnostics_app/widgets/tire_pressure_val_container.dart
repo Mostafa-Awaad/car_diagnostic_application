@@ -33,13 +33,25 @@ class TirePressureValContainer extends StatelessWidget {
         child: LayoutBuilder(
           builder: (context, constraints) {
             return Center(
-              child: Text(
-                '$currentTirePressure',
-                style: GoogleFonts.notoSansIndicSiyaqNumbers(
-                  fontWeight: FontWeight.bold,
-                  color: tirePressureColor,
-                  fontSize: constraints.maxWidth * 0.4,
-                ),
+              child: Column(
+                children: [
+                  Text(
+                    currentTirePressure.toStringAsFixed(1),
+                    style: GoogleFonts.notoSansIndicSiyaqNumbers(
+                      fontWeight: FontWeight.bold,
+                      color: tirePressureColor,
+                      fontSize: constraints.maxWidth * 0.4,
+                    ),
+                  ),
+                  Text(
+                    'psi',
+                    style: GoogleFonts.notoSansIndicSiyaqNumbers(
+                      fontWeight: FontWeight.bold,
+                      color: Colors.white,
+                      fontSize: constraints.maxWidth * 0.3,
+                    ),
+                  ),
+                ],
               ),
             );
           },

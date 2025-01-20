@@ -8,7 +8,7 @@ import 'package:supabase_flutter/supabase_flutter.dart';
 // Create a class for Speedometer. Making it extends StatefulWidget because the vehicle speed value will change over time.
 class TirePressure extends StatefulWidget {
   const TirePressure({super.key});
-
+  
   @override
   State<TirePressure> createState() => _TirePressureState();
 }
@@ -32,10 +32,11 @@ class _TirePressureState extends State<TirePressure> {
   final VehicleDataSignal tirePressureSignal = VehicleDataSignal(
     name: VehicleDataSignalName.carTirePressure,
     hexIndex: 2,
-    scale: 0.5,
-    offset: 0.0,
+    scale: 0.145098039,
+    offset: 0,
     unit: 'psi',
   );
+  
   @override
   void initState() {
     super.initState();
@@ -63,6 +64,11 @@ class _TirePressureState extends State<TirePressure> {
     // Subscribe to real-time updates
     signalHandler.subscribeToRealtimeUpdates();
   }
+  Color getColor() {
+    return (currentTirePressure <= 36) && (currentTirePressure >= 28)
+        ? Colors.lightBlue
+        : const Color.fromARGB(255, 235, 101, 101);
+  }
   @override
   void dispose() {
     //debugPrint("Disposing tire pressure...");
@@ -73,15 +79,14 @@ class _TirePressureState extends State<TirePressure> {
     tirePressureReceivePort.close();
     super.dispose();
   }
-
+  
 
   @override
   Widget build(BuildContext context) {
     //Changing the color of the text showing the speed value depending on its range
-    Color tirePressureValueColor = (currentTirePressure <= 36) && (currentTirePressure >=28)
-        ? Colors.lightBlue
-        : const Color.fromARGB(255, 235, 101, 101);
+    Color tirePressureValueColor = getColor();
 
     return TirePressureGuage(currentTirePressure: currentTirePressure, tirePressureColor: tirePressureValueColor);
   }
+  
 }
