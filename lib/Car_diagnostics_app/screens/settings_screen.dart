@@ -1,3 +1,4 @@
+import 'package:demo_car_diagnostic_application/Car_diagnostics_app/widgets/battery_soh.dart';
 import 'package:demo_car_diagnostic_application/Car_diagnostics_app/widgets/tire_pressure.dart';
 import 'package:flutter/material.dart';
 import 'package:demo_car_diagnostic_application/Car_diagnostics_app/configs/colors.dart';
@@ -227,16 +228,9 @@ class SettingsScreen extends StatelessWidget {
                   const SizedBox(
                     height: 20,
                   ),
-                  LinearPercentIndicator(
-                    animation: true,
-                    backgroundColor: kProgressBackGroundColor.withOpacity(0.5),
-                    percent: 0.8,
-                    lineHeight: 20,
-                    animationDuration: 2500,
-                    center: const Text('90.0%'),
-                    linearGradient: const LinearGradient(
-                        colors: [kPrimaryColor, kSecondaryColor]),
-                  ),
+                  
+                  BatterySoh(),
+
                   const Padding(
                     padding: EdgeInsets.only(top: 20, bottom: 20),
                     child: Text('Sensors',
