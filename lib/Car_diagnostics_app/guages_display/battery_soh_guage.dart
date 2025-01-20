@@ -17,12 +17,24 @@ class BatterySohGuage extends StatelessWidget {
       barRadius: const Radius.circular(10),
       animation: true,
       backgroundColor: const Color.fromARGB(255, 66, 66, 84).withOpacity(0.5),
-      percent: currentBatterySoh/100,
-      lineHeight: 30,
+      percent: currentBatterySoh / 100,
+      lineHeight: 40,
       animationDuration: 1000,
-      center: Text(currentBatterySoh.toStringAsFixed(2) + "%", style: const TextStyle(color: Colors.white, fontWeight: FontWeight.bold)),
-      linearGradient:
-          LinearGradient(colors: currentBatterySoh <= 40 ? [const Color.fromARGB(255, 243, 144, 144), const Color.fromARGB(255, 234, 96, 50)] : [kSecondaryColor, kPrimaryColor]),
+      center: Text(
+        currentBatterySoh.toStringAsFixed(2) + "%",
+        style: const TextStyle(
+          color: Colors.white,
+          fontWeight: FontWeight.bold,
+          fontSize: 16,
+        ),
+      ),
+      linearGradient: LinearGradient(
+          colors: currentBatterySoh <= 40
+              ? [
+                  const Color.fromARGB(255, 243, 144, 144),
+                  const Color.fromARGB(255, 234, 96, 50)
+                ]
+              : [kSecondaryColor, kPrimaryColor]),
     );
   }
 }
