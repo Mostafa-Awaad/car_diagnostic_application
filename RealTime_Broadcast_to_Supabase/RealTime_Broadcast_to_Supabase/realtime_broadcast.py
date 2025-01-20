@@ -24,7 +24,7 @@ dbc = cantools.database.load_file('Custom_dbc2.dbc')
 
 # Get the message by name
 message = dbc.get_message_by_name('OBD2')
-no_of_rows = 10000
+no_of_rows = 100000
 
 def get_max_message_number():
     """
@@ -137,7 +137,7 @@ for i in range(starting_message_number, no_of_rows):
         soc_per = random.randint(0, 100)
         fuel_level = random.randint(0, 100)
         new_distance = random.randint(0, 65535)
-        engine_load = random.randint(0, 100)
+        tire_pressure = random.randint(0, 37)
         timestamp = datetime.now().timestamp() + i * 0.1
 
         # Calculate the current message number
@@ -151,7 +151,7 @@ for i in range(starting_message_number, no_of_rows):
                                                 'S01PID4E_BatterySOC'       : soc_per,
                                                 'S01PID2F_FuelTankLevel'    : fuel_level,
                                                 'S01PID21_DistanceMILOn'    : new_distance,
-                                                'S01PID04_CalcEngineLoad'   : engine_load})
+                                                'S01PID21_TirePressure'   : tire_pressure})
             
             log_file.writelines(f"{current_message_number}\t {timestamp}\t1\t {message.frame_id:X}\t Tx -\t {len(encoded_message)}\t {'\t'.join(f'{b:02X}' for b in encoded_message)}\n")
         except cantools.database.errors.EncodeError as e:
