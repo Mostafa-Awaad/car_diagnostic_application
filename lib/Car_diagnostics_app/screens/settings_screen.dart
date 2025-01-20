@@ -2,7 +2,6 @@ import 'package:demo_car_diagnostic_application/Car_diagnostics_app/widgets/batt
 import 'package:demo_car_diagnostic_application/Car_diagnostics_app/widgets/tire_pressure.dart';
 import 'package:flutter/material.dart';
 import 'package:demo_car_diagnostic_application/Car_diagnostics_app/configs/colors.dart';
-import 'package:percent_indicator/linear_percent_indicator.dart';
 
 class SettingsScreen extends StatelessWidget {
   const SettingsScreen({super.key});
@@ -76,21 +75,23 @@ class SettingsScreen extends StatelessWidget {
                             ],
                           ),
                         ),
-                        Positioned(
-                          top: 0,
-                          right: 0,
-                          child: Container(
-                              decoration: const BoxDecoration(
-                                  shape: BoxShape.circle,
-                                  gradient: buttonGradient),
-                              child: IconButton(
-                                  iconSize: 35,
-                                  onPressed: () {},
-                                  icon: const Icon(
-                                    Icons.replay_rounded,
-                                    color: Colors.white,
-                                  ))),
-                        ),
+                        // Positioned(
+                        //   top: 0,
+                        //   right: 0,
+                        //   child: Container(
+                        //     decoration: const BoxDecoration(
+                        //         shape: BoxShape.circle,
+                        //         gradient: buttonGradient),
+                        //     child: IconButton(
+                        //       iconSize: 35,
+                        //       onPressed: () {},
+                        //       icon: const Icon(
+                        //         Icons.replay_rounded,
+                        //         color: Colors.white,
+                        //       ),
+                        //     ),
+                        //   ),
+                        // ),
                         Positioned(
                             top: 0,
                             right: 0,
@@ -223,14 +224,14 @@ class SettingsScreen extends StatelessWidget {
                       ],
                     ),
                   ),
-                  const Text('Battery Health',
-                      style: TextStyle(fontWeight: FontWeight.bold)),
+                  const Text(
+                    'Battery Health',
+                    style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
+                  ),
                   const SizedBox(
                     height: 20,
                   ),
-                  
                   BatterySoh(),
-
                   const Padding(
                     padding: EdgeInsets.only(top: 20, bottom: 20),
                     child: Text('Sensors',
