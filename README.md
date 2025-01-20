@@ -100,3 +100,7 @@ This script demonstrates a vehicle telemetry data logging system that integrates
 
 Enjoy seamless telemetry data logging and cloud integration! 🚗✨
 
+## Isolates
+
+https://pub.dev/packages/serious_python
+
