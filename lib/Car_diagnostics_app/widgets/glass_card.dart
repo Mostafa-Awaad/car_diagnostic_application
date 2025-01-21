@@ -43,7 +43,7 @@ class GlassCard extends StatelessWidget {
                 children: [
                     ShaderMask(
                       shaderCallback: (bounds) => const LinearGradient(
-                        colors: [Colors.blue, Colors.white],
+                        colors: [Color.fromARGB(255, 159, 83, 172), Color.fromARGB(255, 136, 190, 235)],
                         begin: Alignment.topLeft,
                         end: Alignment.bottomRight,
                       ).createShader(bounds),
@@ -58,7 +58,7 @@ class GlassCard extends StatelessWidget {
                     ),
                     ShaderMask(
                       shaderCallback: (bounds) => const LinearGradient(
-                        colors: [Colors.blue, Colors.white],
+                        colors: [Color.fromARGB(255, 159, 83, 172), Color.fromARGB(255, 136, 190, 235)],
                         begin: Alignment.topLeft,
                         end: Alignment.bottomRight,
                       ).createShader(bounds),

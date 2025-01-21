@@ -80,9 +80,9 @@ class _TemperatureEngCoolant extends State<TemperatureEngCoolant> {
     //Changing the color of the text showing the speed value depending on its range
     Color getTemperatureColor() {
     if (currentTemp <= 85) {
-      return Colors.green;
+      return Colors.blue;
     } else if (currentTemp <= 170) {
-      return Colors.yellow;
+      return Colors.orange;
     } else {
       return Colors.red;
     }

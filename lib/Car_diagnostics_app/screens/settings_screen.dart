@@ -237,35 +237,35 @@ class SettingsScreen extends StatelessWidget {
                     child: Text('Sensors',
                         style: TextStyle(fontWeight: FontWeight.bold)),
                   ),
-                  const Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    children: [
-                      Sensor(
-                        sensorWidth: 60,
-                        heigth: 120,
-                        value: 0.8,
-                        label: 'Motors',
-                      ),
-                      Sensor(
-                        sensorWidth: 60,
-                        heigth: 120,
-                        value: 0.4,
-                        label: 'Batery Temp',
-                      ),
-                      Sensor(
-                        sensorWidth: 60,
-                        heigth: 120,
-                        value: 0.9,
-                        label: 'Brakes',
-                      ),
-                      Sensor(
-                        sensorWidth: 60,
-                        heigth: 120,
-                        value: 0.6,
-                        label: 'Suspentions',
-                      )
-                    ],
-                  )
+                  // const Row(
+                  //   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  //   children: [
+                  //     Sensor(
+                  //       sensorWidth: 60,
+                  //       heigth: 120,
+                  //       value: 0.8,
+                  //       label: 'Motors',
+                  //     ),
+                  //     Sensor(
+                  //       sensorWidth: 60,
+                  //       heigth: 120,
+                  //       value: 0.4,
+                  //       label: 'Batery Temp',
+                  //     ),
+                  //     Sensor(
+                  //       sensorWidth: 60,
+                  //       heigth: 120,
+                  //       value: 0.9,
+                  //       label: 'Brakes',
+                  //     ),
+                  //     Sensor(
+                  //       sensorWidth: 60,
+                  //       heigth: 120,
+                  //       value: 0.6,
+                  //       label: 'Suspentions',
+                  //     )
+                  //   ],
+                  // )
                 ],
               ),
             )
@@ -359,7 +359,10 @@ class _CustomRippleState extends State<CustomRipple>
       scale: _animation,
       child: Container(
         decoration: BoxDecoration(
-            border: Border.all(color: kPrimaryColor, width: 8),
+            border: Border.all(
+              color: Color.lerp(Colors.blue, Colors.purple, 0.4)!, 
+              width: 8
+            ),
             shape: BoxShape.circle),
       ),
     );

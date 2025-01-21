@@ -34,7 +34,7 @@ class BatterySohGuage extends StatelessWidget {
                   const Color.fromARGB(255, 243, 144, 144),
                   const Color.fromARGB(255, 234, 96, 50)
                 ]
-              : [kSecondaryColor, kPrimaryColor]),
+              : [Colors.blue, Colors.purple]),
     );
   }
 }
