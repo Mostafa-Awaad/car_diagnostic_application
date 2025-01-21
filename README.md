@@ -62,7 +62,7 @@
    - The script will:
      - Simulate CAN messages.
      - Log them into `vehicle_speed_log.asc`.
-     - Parse the last logged message and store it in the Supabase database.
+     - Parse the last logged message in the .asc file and store it in the Supabase database.
 3. **Database Table**:
    - Ensure the Supabase table `car_logs_2` has the following schema:
      ```sql
@@ -74,21 +74,6 @@
          signal_type TEXT
      );
      ```
-
----
-
-## Workflow
-
-1. **CAN Message Simulation**:
-   - Simulated telemetry data is encoded using a DBC message definition.
-2. **ASC Logging**:
-   - Messages are appended to an `.asc` log file with a unique timestamp.
-3. **Log Parsing**:
-   - The last line of the log file is parsed for message data.
-   - Data is converted to binary and Base64 for storage.
-4. **Data Insertion**:
-   - Parsed data is inserted into the Supabase database.
-
 ---
 
 ## Output
@@ -121,7 +106,11 @@
 
 Enjoy seamless telemetry data logging and cloud integration! 🚗✨
 
-## Isolates
+---
+
+## 2. Flutter application:
+
+### Isolates
 
 https://pub.dev/packages/serious_python
 
