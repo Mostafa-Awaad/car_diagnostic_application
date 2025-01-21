@@ -24,7 +24,7 @@ class HomeScreen extends StatelessWidget {
                       splashRadius: 25,
                       onPressed: () {},
                       icon:
-                          const Icon(Icons.menu_rounded, color: kPrimaryColor),
+                          const Icon(Icons.menu_rounded, color: Color.fromARGB(255, 154, 41, 206)),
                     ),
                     const Spacer(),
                     Stack(
@@ -43,7 +43,7 @@ class HomeScreen extends StatelessWidget {
                             width: 12,
                             height: 12,
                             decoration: const BoxDecoration(
-                              color: kPrimaryColor,
+                              color: Color.fromARGB(255, 184, 71, 236),
                               shape: BoxShape.circle,
                             ),
                           ),
@@ -55,7 +55,7 @@ class HomeScreen extends StatelessWidget {
               ),
               ShaderMask(
                 shaderCallback: (bounds) => const LinearGradient(
-                  colors: [Colors.blue, Colors.white],
+                  colors: [Colors.purple, Colors.blue],
                   begin: Alignment.topLeft,
                   end: Alignment.bottomRight,
                 ).createShader(bounds),

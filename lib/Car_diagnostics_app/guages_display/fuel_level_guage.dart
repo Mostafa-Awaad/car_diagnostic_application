@@ -39,36 +39,19 @@ class FuelLevelGuage extends StatelessWidget{
                       thicknessUnit: GaugeSizeUnit.factor, thickness: 0.1),
                   ranges: <GaugeRange>[
                     GaugeRange(
-                      startValue: 0,
-                      endValue: 25,
-                      color: Colors.red,
+                      startValue: -40,
+                      endValue: 215,
                       startWidth: 0.1,
-                      endWidth: 0.1,
                       sizeUnit: GaugeSizeUnit.factor,
-                    ),
-                    GaugeRange(
-                      startValue: 25,
-                      endValue: 50,
-                      color: Colors.orange,
-                      startWidth: 0.1,
                       endWidth: 0.1,
-                      sizeUnit: GaugeSizeUnit.factor,
-                    ),
-                    GaugeRange(
-                      startValue: 50,
-                      endValue: 75,
-                      color: Colors.yellow,
-                      startWidth: 0.1,
-                      endWidth: 0.1,
-                      sizeUnit: GaugeSizeUnit.factor,
-                    ),
-                    GaugeRange(
-                      startValue: 75,
-                      endValue: 100,
-                      color: Colors.green,
-                      startWidth: 0.1,
-                      endWidth: 0.1,
-                      sizeUnit: GaugeSizeUnit.factor,
+                      gradient: const SweepGradient(
+                        stops: <double>[0.2, 0.5, 0.75],
+                        colors: <Color>[
+                          Colors.blue,
+                          Color.fromARGB(255, 172, 104, 184),
+                          Colors.purple
+                        ],
+                      ),
                     ),
                   ],
                   pointers: <GaugePointer>[
