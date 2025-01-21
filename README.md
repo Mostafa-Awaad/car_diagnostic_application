@@ -1,4 +1,4 @@
-# Vehicle Monitoring System
+# Vehicle Monitoring System application
 
 ## 1. Broadcasting to Supabase server
    ### Real-time broadcast script to a supabase
