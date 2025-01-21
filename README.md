@@ -1,22 +1,43 @@
-# Vehicle Telemetry Data Logger and Supabase Integration
+# Vehicle Monitoring System
 
-## Overview
-This script demonstrates a vehicle telemetry data logging system that integrates with Supabase for data storage. It simulates CAN messages using a DBC file, generates an `.asc` file for logging, and inserts the parsed telemetry data into a Supabase database.
+## 1. Broadcasting to Supabase server
+   ### Real-time broadcast script to a supabase
+   This python script demonstrates a vehicle data logging system that integrates with Supabase for data storage. It simulates CAN messages using a DBC file, generates an `.asc` file for logging, and inserts the parsed data into a Supabase database.
 
 ---
 
-## Features
+### Features
 
 1. **DBC File Integration**: Loads a `.dbc` file to encode simulated CAN signals into messages.
-2. **CAN Message Simulation**:
-   - Generates vehicle telemetry data (e.g., speed, coolant temperature, fuel level).
+   ##### CAN DBC file (CAN Database) syntax:
+      ```DBC
+      BO_ 2024 OBD2: 8 Vector__XXX
+     SG_ S01PID0D_VehicleSpeed m1 : 63|8@0+ (1,0) [0|255] "km/h" Vector__XXX
+     ```
+      - **BO_** : indicates message start (message syntax).
+      - **2024** : CAN ID.
+      - **OBD2** : Message name.
+      - **8** : Length of message in data bytes.
+      - **Vector__XXX** : Sender name.
+      - **SG_** : Signal syntax.
+      - **S01PID0D_VehicleSpeed** : Signal name.
+      - **m1** : Multiplexer name, where multiplexer (m1) allows multiple signals to be sent using the same message ID but differentiated based on their multiplexer value.
+      - **63** : Start bit of the corresponding signal.
+      - **8** : Length of signal in bits.
+      - **@0** : Means little endian byte ordering, where least significant bit is stored first.
+      - **(1,0)** : (Scale, Offset).
+      - **[0|255]** : Signal minimum and maximum values.
+      - **km/h** : Measuring unit.
+      - **Vector__XXX** : Receiver name.
+3. **CAN Message Simulation**:
+   - Generates vehicle telemetry data (e.g., Speed, Coolant temperature, Fuel level, Tires pressure, Battery State of Charge (SOH) ).
    - Encodes these signals into CAN messages.
-3. **ASC File Logging**:
+4. **ASC File Logging**:
    - Logs generated CAN messages into an `.asc` file in a structured format.
-4. **Parsing CAN Logs**:
+5. **Parsing CAN Logs**:
    - Extracts and parses the last line of the `.asc` file into structured data.
-   - Converts data into a binary format suitable for database storage.
-5. **Supabase Integration**:
+   - Converts data_frame and can_message_id into a binary format suitable for database storage in supabase.
+6. **Supabase Integration**:
    - Inserts parsed telemetry data into a Supabase database table.
 
 ---
