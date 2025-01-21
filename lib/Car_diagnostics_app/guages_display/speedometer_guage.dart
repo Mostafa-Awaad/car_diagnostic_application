@@ -30,7 +30,7 @@ class SpeedometerGuage extends StatelessWidget{
                 width: 20, 
                 gradient: const SweepGradient(
                   ///Make the range pointer a mix with three colours to beautify the design
-                  colors: [Colors.cyan, Colors.blueAccent, Colors.purple],
+                  colors: [Colors.cyan, Colors.blueAccent, Color.fromARGB(255, 152, 5, 231)],
                   stops: [0.0, 0.5, 1.0],
                 ),
                 cornerStyle: CornerStyle.bothCurve,

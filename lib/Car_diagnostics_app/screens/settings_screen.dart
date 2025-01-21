@@ -360,7 +360,7 @@ class _CustomRippleState extends State<CustomRipple>
       child: Container(
         decoration: BoxDecoration(
             border: Border.all(
-              color: Color.lerp(Colors.blue, Colors.purple, 0.4)!, 
+              color: Color.lerp(Colors.cyan, Colors.blue, 0.4)!, 
               width: 8
             ),
             shape: BoxShape.circle),

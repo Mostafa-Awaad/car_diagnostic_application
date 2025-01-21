@@ -31,7 +31,7 @@ class _BaseScreenState extends State<BaseScreen> {
         shaderCallback: (Rect bounds) {
           return isSelected
               ? LinearGradient(
-                  colors: [Colors.blue, Color(0xFF7209B7)], // Blue-purple gradient
+                  colors: [Colors.cyan, Colors.blue], // Blue-purple gradient
                   begin: Alignment.topLeft,
                   end: Alignment.bottomRight,
                 ).createShader(bounds)
@@ -86,7 +86,7 @@ class _BaseScreenState extends State<BaseScreen> {
                           decoration: BoxDecoration(
                             shape: BoxShape.circle,
                             gradient: LinearGradient(
-                              colors: [Colors.blue, Colors.purple], // Blue-purple gradient for power button
+                              colors: [Colors.cyan, Colors.blue], // Blue-purple gradient for power button
                               begin: Alignment.topLeft,
                               end: Alignment.bottomRight,
                             ),
