@@ -1,4 +1,3 @@
-import 'package:demo_car_diagnostic_application/Car_diagnostics_app/configs/colors.dart';
 import 'package:flutter/material.dart';
 import 'package:percent_indicator/linear_percent_indicator.dart';
 
