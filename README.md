@@ -1,16 +1,44 @@
-
+![Blue Gradient Header Banner](https://github.com/user-attachments/assets/d6241aa9-5266-4bad-b83d-3ed6447bc53d)
 # Vehicle Monitoring System application
+## Table of Contents
+- [About](#-about)
+- [Features](#-features)
+- [Workflow](#-workflow)
+- [Technology Stack](#-technology-stack)
+- [Usage](#-usage)
+- [Output](#-output)
 
-## 1. Broadcasting to Supabase server
-   ### Real-time broadcast script to a supabase
-   This python script demonstrates a vehicle data logging system that integrates with Supabase for data storage. It simulates CAN messages using a DBC file, generates an `.asc` file for logging, and inserts the parsed data into a Supabase database.
+### 🚘 About
+The **Car Monitoring System Application** is a real-time vehicle diagnostics and monitoring solution designed using **Flutter** for the user interface and **Python** for backend data processing. It provides an interactive and visually appealing dashboard that streams various car signals in real-time using dynamic gauges for each signal.
 
 ---
-
-### Features
-
-1. **DBC File Integration**: Loads a `.dbc` file to encode simulated CAN signals into messages.
-   ##### CAN DBC file (CAN Database) syntax:
+### ✨ Features
+- **Flutter Application**:
+  
+  - Displays real-time vehicle signals on an intuitive dashboard.
+  - Uses custom gauges to visualize key metrics such as:
+    - **Vehicle Speed**
+    - **Fuel Level**
+    - **Engine Coolant Temperature**
+    - **Car Tire Pressure**
+    - **Battery Health**
+  - Real-time data streaming for a seamless user experience.
+   #### a) 🏢 Architecture:
+   - For achieving modularity, the architecture is divided into:
+     - A general model for any vehicle data signal (speed, engine coolant temperature, fuel level, etc...).
+     - Two dart files for dealing with all sorts of signals such as (fetching most recent row in supabase - handling new row - subscribing to real-time updates) and (extracting the signal from a specific index in the data frame) which is represented in (`signal_handler.dart`& `signal_processor.dart`) respectively.
+     - each screen in the app has its own dart file.
+     - Folder for widgets, where each widget extracts a specific car signal by utilizing functions in signal_handler and signal processor.
+     - Folder for gauges, where each signal has its own gauge, which is responsible for how the signal will be represented.
+   #### b)🧵🧵 Isolates:
+    - Streaming multiple car signals is handled using isolates, which is multi-threading in other programming languages.
+    - An isolate has a unique characteristic: it runs within its own chunk of memory, processing events independently. Unlike threads in other programming languages, isolates 
+      do not share memory, ensuring better isolation and thread safety.
+    - This ensures smooth running of the application without crashing.
+   
+- **Backend Python Script**:
+  - Processes a **DBC (Database CAN)** file to decode CAN messages.
+    ##### CAN DBC file (CAN Database) syntax:
       ```DBC
       BO_ 2024 OBD2: 8 Vector__XXX
      SG_ S01PID0D_VehicleSpeed m1 : 63|8@0+ (1,0) [0|255] "km/h" Vector__XXX
@@ -30,32 +58,64 @@
       - **[0|255]** : Signal minimum and maximum values.
       - **km/h** : Measuring unit.
       - **Vector__XXX** : Receiver name.
-3. **CAN Message Simulation**:
-   - Generates vehicle telemetry data (e.g., Speed, Coolant temperature, Fuel level, Tires pressure, Battery State of Charge (SOH) ).
-   - Encodes these signals into CAN messages.
-4. **ASC File Logging**:
-   - Logs generated CAN messages into an `.asc` file in a structured format.
-5. **Parsing CAN Logs**:
-   - Extracts and parses the last line of the `.asc` file into structured data.
-   - Converts data_frame and can_message_id into a binary format suitable for database storage in supabase.
-6. **Supabase Integration**:
-   - Inserts parsed telemetry data into a Supabase database table.
+  - Converts the DBC data into an **ASC (ASCII log)** file containing continuously generated rows of data.
+  - Automatically uploads the parsed data from the ASC file to a **Supabase database table** in real-time.
+
+- **Supabase Integration**:
+  - Acts as the central data repository for storing vehicle signal information.
+  - Provides real-time updates to the Flutter app by streaming the **latest row** from the database.
+
+---
+### 🔗 Workflow
+1. **Data Processing**:
+   - A Python script decodes vehicle data using a **DBC file** and generates an **ASC file** with continuous vehicle signal data.
+
+2. **Data Storage**:
+   - The Python script uploads each new line of the ASC file to a **Supabase table**, ensuring a real-time flow of data.
+   - Snippet from the .asc file
+     ![image](https://github.com/user-attachments/assets/570afd29-4497-4fed-aa04-e9dafaec141b)
+
+3. **Real-Time Display**:
+   - The Flutter application fetches the **latest row** from the Supabase table.
+   - Displays the corresponding signals dynamically using **gauges** for an engaging and informative user.
+       <p align="center">
+        <img src="https://github.com/user-attachments/assets/768ee458-14fb-4734-9338-cf50d5ddccd3" alt="Screenshot_1737551439" style="width: 20%; margin-right: 30px;" />
+        <img src="https://github.com/user-attachments/assets/43de7fc9-f745-4768-a78e-b4fe5f7b17ed" alt="Screenshot_1737551445" style="width: 20%; margin-right: 30px;" />
+        <img src="https://github.com/user-attachments/assets/4a46c86e-8a56-47dc-ac7a-a78c50a12e5a" alt="Screenshot_1737551452" style="width: 20%; margin-right: 30px;" />
+        <img src="https://github.com/user-attachments/assets/f200e4ad-23a7-42b1-9bb2-7e0ffe189e0e" alt="Screenshot_1737551457" style="width: 20%;" />
+       </p>
+
+
+
 
 ---
 
-## Requirements
-
-- **Python Libraries**:
-  - `supabase`, `cantools`, `binascii`, `base64`, `os`, `time`, `datetime`, `random`
-- **Environment Variables**:
-  - `URL`: Supabase project URL.
-  - `KEY`: Supabase project anon key.
-- **Files**:
-  - `Custom_dbc2.dbc`: The DBC file containing CAN message definitions.
+### 🛠 Technology Stack
+- **Frontend**: Flutter (Dart)
+- **Backend**: Python
+  - **Python Libraries**:
+      ```
+      - supabase,
+      - cantools
+      - binascii
+      - base64
+      - os
+      - time
+      - datetime
+      - random
+       ```
+- **Database**: Supabase (PostgreSQL-based)
+  - **Environment Variables**:
+     - `URL`: Supabase project URL.
+     - `KEY`: Supabase project anon key.
+- **Data Format**: DBC to ASC file conversion
+  - **Files**:
+     - `Custom_dbc2.dbc`: The DBC file containing CAN message definitions.
+- **Communication**: Real-time database updates and streaming.
 
 ---
 
-## Usage
+### 📱 Usage
 
 1. **Setup Environment**:
    - Set `URL` and `KEY` environment variables for Supabase credentials.
@@ -77,7 +137,7 @@
      ```
 ---
 
-## Output
+### 📁 Output
 
 - **ASC File**:
   - Example of logged data:
@@ -102,7 +162,7 @@
 
 ---
 
-## Notes
+### ⚠ Notes
 
 - **Error Handling**:
   - Logs errors in encoding CAN messages or parsing invalid lines.
@@ -110,21 +170,3 @@
   - Can be extended to handle real-time CAN data streams or other DBC definitions.
 
 ---
-
-## 2. Flutter application:
-## a) 🏢 Architecture:
-   - For achieving modularity, the architecture is divided into:
-     - A general model for any vehicle data signal (speed, engine coolant temperature, fuel level, etc...).
-     - Two dart files for dealing with all sorts of signals such as (fetching most recent row in supabase - handling new row - subscribing to real-time updates) and (extracting the signal from a specific index in the data frame) which is represented in (`signal_handler.dart`& `signal_processor.dart`) respectively.
-     - each screen in the app has its own dart file.
-     - Folder for widgets, where each widget extracts a specific car signal by utilizing functions in signal_handler and signal processor.
-     - Folder for gauges, where each signal has its own gauge, which is responsible for how the signal will be represented.
-## b)🧵🧵 Isolates:
- - Streaming multiple car signals is handled using isolates, which is multi-threading in other programming languages.
- - An isolate has a unique characteristic: it runs within its own chunk of memory, processing events independently. Unlike threads in other programming languages, isolates 
-   do not share memory, ensuring better isolation and thread safety.
- - This ensures smooth running of the application without crashing.
-
-
-https://pub.dev/packages/serious_python
-
