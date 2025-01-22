@@ -6,7 +6,7 @@
 [![Python](https://img.shields.io/badge/Backend-Python-3776AB?logo=python&logoColor=white)](https://www.python.org)
 [![Supabase](https://img.shields.io/badge/Database-Supabase-3ECF8E?logo=supabase&logoColor=3ECF8E)](https://supabase.io)
 [![PostgreSQL](https://img.shields.io/badge/Database-PostgreSQL-4169E1?logo=postgresql&logoColor=white)](https://postgresql.org)
-[![CAN DBC](https://img.shields.io/badge/CAN-DBC-blue?logo=can&logoColor=white)](#)
+[![CAN DBC](https://img.shields.io/badge/Database-CAN_DBC-lightgrey?logo=database&logoColor=blue)](https://www.w3schools.com/sql/)
 
 
 
@@ -55,21 +55,24 @@ The **Car Monitoring System Application** is a real-time vehicle diagnostics and
       BO_ 2024 OBD2: 8 Vector__XXX
      SG_ S01PID0D_VehicleSpeed m1 : 63|8@0+ (1,0) [0|255] "km/h" Vector__XXX
      ```
-      - **BO_** : indicates message start (message syntax).
-      - **2024** : CAN ID.
-      - **OBD2** : Message name.
-      - **8** : Length of message in data bytes.
-      - **Vector__XXX** : Sender name.
-      - **SG_** : Signal syntax.
-      - **S01PID0D_VehicleSpeed** : Signal name.
-      - **m1** : Multiplexer name, where multiplexer (m1) allows multiple signals to be sent using the same message ID but differentiated based on their multiplexer value.
-      - **63** : Start bit of the corresponding signal.
-      - **8** : Length of signal in bits.
-      - **@0** : Means little endian byte ordering, where least significant bit is stored first.
-      - **(1,0)** : (Scale, Offset).
-      - **[0|255]** : Signal minimum and maximum values.
-      - **km/h** : Measuring unit.
-      - **Vector__XXX** : Receiver name.
+     | **Field**                      | **Description**                                                                                                    |
+      |--------------------------------|--------------------------------------------------------------------------------------------------------------------|
+      | **BO_**                        | Indicates message start (message syntax).                                                                          |
+      | **2024**                       | CAN ID.                                                                                                            |
+      | **OBD2**                       | Message name.                                                                                                      |
+      | **8**                          | Length of message in data bytes.                                                                                   |
+      | **Vector__XXX**                | Sender name.                                                                                                       |
+      | **SG_**                        | Signal syntax.                                                                                                     |
+      | **S01PID0D_VehicleSpeed**      | Signal name.                                                                                                       |
+      | **m1**                         | Multiplexer name, where multiplexer (m1) allows multiple signals to be sent using the same message ID but differentiated based on their multiplexer value. |
+      | **63**                         | Start bit of the corresponding signal.                                                                             |
+      | **8**                          | Length of signal in bits.                                                                                          |
+      | **@0**                         | Little-endian byte ordering, where the least significant bit is stored first.                                      |
+      | **(1,0)**                      | (Scale, Offset).                                                                                                   |
+      | **[0|255]**                    | Signal minimum and maximum values.                                                                                 |
+      | **km/h**                       | Measuring unit.                                                                                                    |
+      | **Vector__XXX**                | Receiver name.                                                                                                     |
+
   - Converts the DBC data into an **ASC (ASCII log)** file containing continuously generated rows of data.
   - Automatically uploads the parsed data from the ASC file to a **Supabase database table** in real-time.
 
