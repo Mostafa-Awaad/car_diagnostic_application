@@ -10,7 +10,7 @@
 
 
 
-# Vehicle Monitoring System application
+# 🔎 Vehicle Monitoring System application
 ## Table of Contents
 - [About](#-about)
 - [Features](#-features)
