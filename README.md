@@ -6,6 +6,7 @@
 [![Python](https://img.shields.io/badge/Backend-Python-3776AB?logo=python&logoColor=white)](https://www.python.org)
 [![Supabase](https://img.shields.io/badge/Database-Supabase-3ECF8E?logo=supabase&logoColor=3ECF8E)](https://supabase.io)
 [![PostgreSQL](https://img.shields.io/badge/Database-PostgreSQL-4169E1?logo=postgresql&logoColor=white)](https://postgresql.org)
+[![CAN DBC](https://img.shields.io/badge/CAN-DBC-blue?logo=can&logoColor=white)](#)
 
 
 
