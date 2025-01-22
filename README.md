@@ -112,11 +112,14 @@
 ---
 
 ## 2. Flutter application:
-## a) Architecture:🏢
+## a) 🏢 Architecture:
    - For achieving modularity, the architecture is divided into:
      - A general model for any vehicle data signal (speed, engine coolant temperature, fuel level, etc...).
      - Two dart files for dealing with all sorts of signals such as (fetching most recent row in supabase - handling new row - subscribing to real-time updates) and (extracting the signal from a specific index in the data frame) which is represented in (`signal_handler.dart`& `signal_processor.dart`) respectively.
-## Isolates:
+     - each screen in the app has its own dart file.
+     - Folder for widgets, where each widget extracts a specific car signal by utilizing functions in signal_handler and signal processor.
+     - Folder for gauges, where each signal has its own gauge, which is responsible for how the signal will be represented.
+## b)🧵🧵 Isolates:
  - Streaming multiple car signals is handled using isolates, which is multi-threading in other programming languages.
  - An isolate has a unique characteristic: it runs within its own chunk of memory, processing events independently. Unlike threads in other programming languages, isolates 
    do not share memory, ensuring better isolation and thread safety.
