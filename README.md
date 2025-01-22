@@ -1,3 +1,4 @@
+
 # Vehicle Monitoring System application
 
 ## 1. Broadcasting to Supabase server
@@ -94,6 +95,10 @@
         "signal_type": "Tx"
     }
     ```
+- Supabase data representation
+   ![image](https://github.com/user-attachments/assets/e3c09b44-6f26-4c6e-b76d-9f217e1f8218)
+   ![image](https://github.com/user-attachments/assets/201cdf6f-09da-44c1-a6a5-12fe4ef13b50)
+
 
 ---
 
@@ -104,13 +109,19 @@
 - **Extensibility**:
   - Can be extended to handle real-time CAN data streams or other DBC definitions.
 
-Enjoy seamless telemetry data logging and cloud integration! 🚗✨
-
 ---
 
 ## 2. Flutter application:
+## a) Architecture:🏢
+   - For achieving modularity, the architecture is divided into:
+     - A general model for any vehicle data signal (speed, engine coolant temperature, fuel level, etc...).
+     - Two dart files for dealing with all sorts of signals such as (fetching most recent row in supabase - handling new row - subscribing to real-time updates) and (extracting the signal from a specific index in the data frame) which is represented in (`signal_handler.dart`& `signal_processor.dart`) respectively.
+## Isolates:
+ - Streaming multiple car signals is handled using isolates, which is multi-threading in other programming languages.
+ - An isolate has a unique characteristic: it runs within its own chunk of memory, processing events independently. Unlike threads in other programming languages, isolates 
+   do not share memory, ensuring better isolation and thread safety.
+ - This ensures smooth running of the application without crashing.
 
-### Isolates
 
 https://pub.dev/packages/serious_python
 
