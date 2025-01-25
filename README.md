@@ -1,7 +1,7 @@
 ![Blue Gradient Header Banner](https://github.com/user-attachments/assets/d6241aa9-5266-4bad-b83d-3ed6447bc53d)
 
 ---
-[![Language](https://img.shields.io/badge/Language-Dart-3776AB?logo=dart&logoColor=blue)](https://www.dart.org)
+[![Language](https://img.shields.io/badge/Programming-Dart-3776AB?logo=dart&logoColor=blue)](https://www.dart.org)
 [![Flutter](https://img.shields.io/badge/Frontend-Flutter-02569B?logo=flutter&logoColor=blue)](https://flutter.dev)
 [![Python](https://img.shields.io/badge/Backend-Python-3776AB?logo=python&logoColor=white)](https://www.python.org)
 [![Supabase](https://img.shields.io/badge/Database-Supabase-3ECF8E?logo=supabase&logoColor=3ECF8E)](https://supabase.io)
