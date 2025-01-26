@@ -69,7 +69,7 @@ The **Car Monitoring System Application** is a real-time vehicle diagnostics and
       | **8**                          | Length of signal in bits.                                                                                          |
       | **@0**                         | Little-endian byte ordering, where the least significant bit is stored first.                                      |
       | **(1,0)**                      | (Scale, Offset).                                                                                                   |
-      | **[0|255]**                    | Signal minimum and maximum values.                                                                                 |
+      | **[0,255]**                    | Signal minimum and maximum values.                                                                                 |
       | **km/h**                       | Measuring unit.                                                                                                    |
       | **Vector__XXX**                | Receiver name.                                                                                                     |
 
