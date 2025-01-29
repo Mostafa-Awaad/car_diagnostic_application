@@ -1,3 +1,4 @@
+import 'package:demo_car_diagnostic_application/Car_diagnostics_app/screens/home_screen.dart';
 import 'package:demo_car_diagnostic_application/Car_diagnostics_app/widgets/battery_soh.dart';
 import 'package:demo_car_diagnostic_application/Car_diagnostics_app/widgets/tire_pressure.dart';
 import 'package:flutter/material.dart';
@@ -16,7 +17,13 @@ class SettingsScreen extends StatelessWidget {
             Row(
               children: [
                 IconButton(
-                    onPressed: () {},
+                    onPressed: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => const HomeScreen()),
+                      );
+                    },
                     iconSize: 30,
                     splashRadius: 25,
                     icon: const Icon(
@@ -231,41 +238,41 @@ class SettingsScreen extends StatelessWidget {
                   const SizedBox(
                     height: 20,
                   ),
-                  BatterySoh(),
-                  const Padding(
-                    padding: EdgeInsets.only(top: 20, bottom: 20),
-                    child: Text('Sensors',
-                        style: TextStyle(fontWeight: FontWeight.bold)),
-                  ),
-                  const Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    children: [
-                      Sensor(
-                        sensorWidth: 60,
-                        heigth: 120,
-                        value: 0.8,
-                        label: 'Motors',
-                      ),
-                      Sensor(
-                        sensorWidth: 60,
-                        heigth: 120,
-                        value: 0.4,
-                        label: 'Batery Temp',
-                      ),
-                      Sensor(
-                        sensorWidth: 60,
-                        heigth: 120,
-                        value: 0.9,
-                        label: 'Brakes',
-                      ),
-                      Sensor(
-                        sensorWidth: 60,
-                        heigth: 120,
-                        value: 0.6,
-                        label: 'Suspentions',
-                      )
-                    ],
-                  )
+                  const BatterySoh(),
+                  // const Padding(
+                  //   padding: EdgeInsets.only(top: 20, bottom: 20),
+                  //   child: Text('Sensors',
+                  //       style: TextStyle(fontWeight: FontWeight.bold)),
+                  // ),
+                  // const Row(
+                  //   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  //   children: [
+                  //     Sensor(
+                  //       sensorWidth: 60,
+                  //       heigth: 120,
+                  //       value: 0.8,
+                  //       label: 'Motors',
+                  //     ),
+                  //     Sensor(
+                  //       sensorWidth: 60,
+                  //       heigth: 120,
+                  //       value: 0.4,
+                  //       label: 'Batery Temp',
+                  //     ),
+                  //     Sensor(
+                  //       sensorWidth: 60,
+                  //       heigth: 120,
+                  //       value: 0.9,
+                  //       label: 'Brakes',
+                  //     ),
+                  //     Sensor(
+                  //       sensorWidth: 60,
+                  //       heigth: 120,
+                  //       value: 0.6,
+                  //       label: 'Suspentions',
+                  //     )
+                  //   ],
+                  // )
                 ],
               ),
             )
