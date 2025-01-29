@@ -1,158 +1,85 @@
+import 'package:demo_car_diagnostic_application/Car_diagnostics_app/screens/battery_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:demo_car_diagnostic_application/Car_diagnostics_app/configs/colors.dart';
 import 'package:demo_car_diagnostic_application/Car_diagnostics_app/screens/settings_screen.dart';
 import 'home_screen.dart';
 
 class BaseScreen extends StatefulWidget {
-  BaseScreen({Key? key}) : super(key: key);
+  const BaseScreen({super.key});
 
   @override
-  _BaseScreenState createState() => _BaseScreenState();
+  State<BaseScreen> createState() => _BaseScreenState();
 }
 
 class _BaseScreenState extends State<BaseScreen> {
-  int _selectedIndex = 0;
-
-  navigateTo(int index) {
-    setState(() {
-      _selectedIndex = index;
-    });
-  }
-
-  // Bottom navigation icon with gradient(Mix of Colors) effect
-  Widget _bottomAppBarIcon({required int index, required IconData icon}) {
-    bool isSelected = _selectedIndex == index;
-
-    return IconButton(
-      onPressed: () {
-        navigateTo(index);
-      },
-      icon: ShaderMask(
-        shaderCallback: (Rect bounds) {
-          return isSelected
-              ? LinearGradient(
-                  colors: [Colors.blue, Color(0xFF7209B7)], // Blue-purple gradient
-                  begin: Alignment.topLeft,
-                  end: Alignment.bottomRight,
-                ).createShader(bounds)
-              : LinearGradient(
-                  colors: [Colors.grey[400]!, Colors.grey[500]!],
-                ).createShader(bounds);
-        },
-        child: Icon(
-          icon,
-          color: Colors.white, // Set white to apply gradient from ShaderMask
-          size: isSelected ? 36 : 30, // Larger size for selected icon
-        ),
-      ),
-      iconSize: 30,
-    );
-  }
-
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      bottomNavigationBar: BottomAppBar(
-        elevation: 10,
-        color: Color(0xFF1B1B1F),
-        child: SafeArea(
-          child: Container(
-            height: 70,
-            decoration: BoxDecoration(
-              gradient: LinearGradient(
-                //For changing the color of the bottom navigation bar
-                colors: [Colors.blueGrey.withOpacity(0.8), Colors.black.withOpacity(0.3)],
-                begin: Alignment.topCenter,
-                end: Alignment.bottomCenter,
-              ),
-              //The Radius for of the borders of the navigation bar
-              borderRadius: BorderRadius.vertical(top: Radius.circular(20), bottom: Radius.circular(20)),
-            
-            ),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: [
-                _bottomAppBarIcon(index: 0, icon: Icons.home_rounded),
-                _bottomAppBarIcon(index: 1, icon: Icons.bar_chart_rounded),
-                SizedBox(
-                  width: 80,
-                  height: 80,
-                  child: Stack(
-                    clipBehavior: Clip.none,
-                    children: [
-                      Positioned(
-                        bottom: 10,
-                        child: Container(
-                          decoration: BoxDecoration(
-                            shape: BoxShape.circle,
-                            gradient: LinearGradient(
-                              colors: [Colors.blue, Colors.purple], // Blue-purple gradient for power button
-                              begin: Alignment.topLeft,
-                              end: Alignment.bottomRight,
-                            ),
-                            boxShadow: [
-                              BoxShadow(
-                                color: Colors.black.withOpacity(0.5),
-                                blurRadius: 8,
-                                spreadRadius: 2,
-                                offset: Offset(0, 4),
-                              ),
-                            ],
-                          ),
-                          child: IconButton(
-                            iconSize: 60,
-                            onPressed: () {},
-                            icon: Icon(
-                              Icons.power_settings_new_rounded,
-                              color: Colors.white,
-                            ),
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
+    return DefaultTabController(
+      length: 4,
+      child: Scaffold(
+        backgroundColor: const Color.fromARGB(255, 41, 48, 53),
+        appBar: AppBar(
+          toolbarHeight: 80,
+          backgroundColor: const Color.fromARGB(255, 41, 48, 53),
+          title: Row(
+            mainAxisSize: MainAxisSize.max,
+            mainAxisAlignment: MainAxisAlignment.end,
+            children: [
+              const Text(
+                'Vehicle Tracker',
+                style: TextStyle(
+                  fontSize: 20,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.white,
                 ),
-                _bottomAppBarIcon(index: 2, icon: Icons.settings),
-                _bottomAppBarIcon(index: 3, icon: Icons.account_circle_rounded),
-              ],
-            ),
+              ),
+              const Spacer(),
+              Stack(
+                children: [
+                  IconButton(
+                    color: Colors.blueGrey,
+                    iconSize: 40,
+                    splashRadius: 25,
+                    onPressed: () {},
+                    icon: const FittedBox(
+                        child: Icon(Icons.account_circle_rounded)),
+                  ),
+                  Positioned(
+                    top: 10,
+                    right: 10,
+                    child: Container(
+                      width: 8,
+                      height: 8,
+                      decoration: const BoxDecoration(
+                        color: Colors.blue,
+                        shape: BoxShape.circle,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+              IconButton(
+                iconSize: 40,
+                splashRadius: 25,
+                onPressed: () {},
+                icon: const Icon(Icons.more_vert_rounded, color: Colors.blue),
+              ),
+            ],
           ),
         ),
-      ),
-      body:
-      Container(
-        decoration: BoxDecoration(
-          gradient: kBackGroundGradient,
-        ),
-      // DecoratedBox( 
-      //     // BoxDecoration takes the image
-      //     decoration: BoxDecoration( 
-      //       // Image set to background of the body
-      //       image: DecorationImage( 
-      //           image: AssetImage("lib/Car_diagnostics_app/images/futuristic_background4.jpg"), fit: BoxFit.cover),
-      //     ),
-        child: IndexedStack(
-          index: _selectedIndex,
+        bottomNavigationBar: menu(),
+        body: const TabBarView(
           children: [
-            // List of Widgets each widget represents a page
-            // Navigation to different pages (HomeScreen, (Container1 -> bar_chart), SettingScreen,
-            // Container2 -> profile )
             HomeScreen(),
-            Container(
-              child: Center(
-                child: Text(
-                  'Page 02',
-                  style: TextStyle(color: Colors.white, fontSize: 24, fontWeight: FontWeight.bold),
-                ),
-              ),
-            ),
+            BatteryScreen(),
             SettingsScreen(),
-            Container(
-              child: Center(
-                child: Text(
-                  'Page 04',
-                  style: TextStyle(color: Colors.white, fontSize: 24, fontWeight: FontWeight.bold),
-                ),
+            Center(
+              child: Text(
+                'Account',
+                style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 24,
+                    fontWeight: FontWeight.bold),
               ),
             )
           ],
@@ -160,4 +87,49 @@ class _BaseScreenState extends State<BaseScreen> {
       ),
     );
   }
+}
+
+Widget menu() {
+  return Container(
+    color: const Color.fromARGB(255, 41, 48, 53),
+    child: const TabBar(
+      dividerHeight: 0,
+      labelColor: Colors.white,
+      unselectedLabelColor: Colors.white70,
+      indicatorSize: TabBarIndicatorSize.tab,
+      indicatorPadding: EdgeInsets.all(5.0),
+      indicatorColor: Colors.white,
+      indicatorWeight: 3.0,
+      tabs: [
+        Tab(
+          text: "Home",
+          icon: Icon(
+            size: 30,
+            Icons.home_rounded,
+          ),
+        ),
+        Tab(
+          text: "Battery",
+          icon: Icon(
+            size: 30,
+            Icons.battery_charging_full_rounded,
+          ),
+        ),
+        Tab(
+          text: "Status",
+          icon: Icon(
+            size: 30,
+            Icons.settings,
+          ),
+        ),
+        Tab(
+          text: "Account",
+          icon: Icon(
+            size: 30,
+            Icons.account_circle_rounded,
+          ),
+        ),
+      ],
+    ),
+  );
 }

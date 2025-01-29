@@ -1,7 +1,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">
     <uses-permission android:name="android.permission.INTERNET" />
     <application
-        android:label="demo_car_diagnostic_application"
+        android:label="Car tracker"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
         <activity

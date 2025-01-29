@@ -81,8 +81,8 @@ class _FuelLevelState extends State<FuelLevel> {
     Color getFuelColor() {
     if (currentFuelLevel < 25) return Colors.red;
     if (currentFuelLevel < 50) return Colors.orange;
-    if (currentFuelLevel < 75) return Colors.yellow;
-    return Colors.green;
+    if (currentFuelLevel < 75) return const Color.fromARGB(255, 144, 192, 230);
+    return Colors.blue;
   }
 
     return FuelLevelGuage(currentFuelLevel: currentFuelLevel, getFuelColor: getFuelColor);

@@ -15,47 +15,47 @@ class HomeScreen extends StatelessWidget {
           physics: const BouncingScrollPhysics(),
           child: Column(
             children: [
-              Material(
+              const Material(
                 type: MaterialType.transparency,
-                child: Row(
-                  children: [
-                    IconButton(
-                      iconSize: 50,
-                      splashRadius: 25,
-                      onPressed: () {},
-                      icon:
-                          const Icon(Icons.menu_rounded, color: kPrimaryColor),
-                    ),
-                    const Spacer(),
-                    Stack(
-                      children: [
-                        IconButton(
-                          iconSize: 50,
-                          splashRadius: 25,
-                          onPressed: () {},
-                          icon: const FittedBox(
-                              child: Icon(Icons.account_circle_rounded)),
-                        ),
-                        Positioned(
-                          top: 10,
-                          right: 10,
-                          child: Container(
-                            width: 12,
-                            height: 12,
-                            decoration: const BoxDecoration(
-                              color: kPrimaryColor,
-                              shape: BoxShape.circle,
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ],
-                ),
+                // child: Row(
+                //   children: [
+                //     IconButton(
+                //       iconSize: 50,
+                //       splashRadius: 25,
+                //       onPressed: () {},
+                //       icon:
+                //           const Icon(Icons.menu_rounded, color: Colors.blue),
+                //     ),
+                //     const Spacer(),
+                //     Stack(
+                //       children: [
+                //         IconButton(
+                //           iconSize: 50,
+                //           splashRadius: 25,
+                //           onPressed: () {},
+                //           icon: const FittedBox(
+                //               child: Icon(Icons.account_circle_rounded)),
+                //         ),
+                //         Positioned(
+                //           top: 10,
+                //           right: 10,
+                //           child: Container(
+                //             width: 12,
+                //             height: 12,
+                //             decoration: const BoxDecoration(
+                //               color: Colors.blue,
+                //               shape: BoxShape.circle,
+                //             ),
+                //           ),
+                //         ),
+                //       ],
+                //     ),
+                //   ],
+                // ),
               ),
               ShaderMask(
                 shaderCallback: (bounds) => const LinearGradient(
-                  colors: [Colors.blue, Colors.white],
+                  colors: [Colors.cyan, Colors.blue],
                   begin: Alignment.topLeft,
                   end: Alignment.bottomRight,
                 ).createShader(bounds),
@@ -89,7 +89,7 @@ class HomeScreen extends StatelessWidget {
                     padding: const EdgeInsets.only(right: 25),
                     child: ShaderMask(
                       shaderCallback: (bounds) => const LinearGradient(
-                        colors: [Colors.purple, Colors.blue],
+                        colors: [Colors.cyan, Colors.blue],
                         begin: Alignment.topLeft,
                         end: Alignment.bottomRight,
                       ).createShader(bounds),

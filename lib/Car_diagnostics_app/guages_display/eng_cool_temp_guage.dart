@@ -50,9 +50,9 @@ class EngCoolTempGuage extends StatelessWidget{
                       gradient: const SweepGradient(
                         stops: <double>[0.2, 0.5, 0.75],
                         colors: <Color>[
-                          Colors.green,
-                          Colors.yellow,
-                          Colors.red
+                          Colors.cyan,
+                          Colors.blue,
+                          Color.fromARGB(255, 123, 2, 228)
                         ],
                       ),
                     ),

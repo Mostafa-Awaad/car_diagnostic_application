@@ -1,4 +1,3 @@
-import 'package:demo_car_diagnostic_application/Car_diagnostics_app/configs/colors.dart';
 import 'package:flutter/material.dart';
 import 'package:percent_indicator/linear_percent_indicator.dart';
 
@@ -34,7 +33,7 @@ class BatterySohGuage extends StatelessWidget {
                   const Color.fromARGB(255, 243, 144, 144),
                   const Color.fromARGB(255, 234, 96, 50)
                 ]
-              : [kSecondaryColor, kPrimaryColor]),
+              : [Colors.cyan, Colors.blue]),
     );
   }
 }

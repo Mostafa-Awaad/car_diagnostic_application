@@ -1,4 +1,4 @@
-import 'package:demo_car_diagnostic_application/Car_diagnostics_app/screens/home_screen.dart';
+import 'package:demo_car_diagnostic_application/Car_diagnostics_app/screens/base_screen.dart';
 import 'package:demo_car_diagnostic_application/Car_diagnostics_app/widgets/battery_soh.dart';
 import 'package:demo_car_diagnostic_application/Car_diagnostics_app/widgets/tire_pressure.dart';
 import 'package:flutter/material.dart';
@@ -21,7 +21,7 @@ class SettingsScreen extends StatelessWidget {
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                            builder: (context) => const HomeScreen()),
+                            builder: (context) =>  BaseScreen()),
                       );
                     },
                     iconSize: 30,
@@ -231,19 +231,12 @@ class SettingsScreen extends StatelessWidget {
                       ],
                     ),
                   ),
-                  const Text(
-                    'Battery Health',
-                    style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
+                  
+                  const Padding(
+                    padding: EdgeInsets.only(top: 20, bottom: 20),
+                    child: Text('Sensors',
+                        style: TextStyle(fontWeight: FontWeight.bold)),
                   ),
-                  const SizedBox(
-                    height: 20,
-                  ),
-                  const BatterySoh(),
-                  // const Padding(
-                  //   padding: EdgeInsets.only(top: 20, bottom: 20),
-                  //   child: Text('Sensors',
-                  //       style: TextStyle(fontWeight: FontWeight.bold)),
-                  // ),
                   // const Row(
                   //   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   //   children: [
@@ -366,7 +359,10 @@ class _CustomRippleState extends State<CustomRipple>
       scale: _animation,
       child: Container(
         decoration: BoxDecoration(
-            border: Border.all(color: kPrimaryColor, width: 8),
+            border: Border.all(
+              color: Color.lerp(Colors.cyan, Colors.blue, 0.4)!, 
+              width: 8
+            ),
             shape: BoxShape.circle),
       ),
     );
