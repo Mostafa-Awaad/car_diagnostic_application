@@ -1,4 +1,5 @@
 import 'package:demo_car_diagnostic_application/Car_diagnostics_app/screens/base_screen.dart';
+import 'package:demo_car_diagnostic_application/Car_diagnostics_app/widgets/distance_traveled.dart';
 import 'package:demo_car_diagnostic_application/Car_diagnostics_app/widgets/tire_pressure.dart';
 import 'package:flutter/material.dart';
 import 'package:demo_car_diagnostic_application/Car_diagnostics_app/configs/colors.dart';
@@ -19,8 +20,7 @@ class SettingsScreen extends StatelessWidget {
                     onPressed: () {
                       Navigator.push(
                         context,
-                        MaterialPageRoute(
-                            builder: (context) =>  BaseScreen()),
+                        MaterialPageRoute(builder: (context) => BaseScreen()),
                       );
                     },
                     iconSize: 30,
@@ -230,12 +230,17 @@ class SettingsScreen extends StatelessWidget {
                       ],
                     ),
                   ),
-                  
+
                   const Padding(
                     padding: EdgeInsets.only(top: 20, bottom: 20),
-                    child: Text('Sensors',
-                        style: TextStyle(fontWeight: FontWeight.bold)),
+                    child: Text(
+                      'Distance Traveled',
+                      style:
+                          TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
+                    ),
                   ),
+                  DistanceTraveled(),
+                  
                   // const Row(
                   //   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   //   children: [
@@ -359,9 +364,7 @@ class _CustomRippleState extends State<CustomRipple>
       child: Container(
         decoration: BoxDecoration(
             border: Border.all(
-              color: Color.lerp(Colors.cyan, Colors.blue, 0.4)!, 
-              width: 8
-            ),
+                color: Color.lerp(Colors.cyan, Colors.blue, 0.4)!, width: 8),
             shape: BoxShape.circle),
       ),
     );

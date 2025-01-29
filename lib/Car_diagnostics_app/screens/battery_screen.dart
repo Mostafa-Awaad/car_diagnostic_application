@@ -22,7 +22,7 @@ class BatteryScreen extends StatelessWidget{
                   const SizedBox(
                     height: 20,
                   ),
-                  const BatterySoh(),
+                  BatterySoh(),
                    const SizedBox(
                     height: 40,
                   ),
@@ -33,7 +33,7 @@ class BatteryScreen extends StatelessWidget{
                   const SizedBox(
                     height: 20,
                   ),
-                  const BatterySoc(),
+                  BatterySoc(),
         ],
       ),
     );

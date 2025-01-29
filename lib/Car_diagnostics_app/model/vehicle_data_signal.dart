@@ -5,6 +5,7 @@ enum VehicleDataSignalName {
   carTirePressure,
   batteryStateOfHealth,
   batteryStateOfCharge,
+  distanceTraveled,
 }
 
 class VehicleDataSignal {
