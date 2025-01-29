@@ -1,6 +1,5 @@
 import 'package:demo_car_diagnostic_application/Car_diagnostics_app/screens/battery_screen.dart';
 import 'package:flutter/material.dart';
-import 'package:demo_car_diagnostic_application/Car_diagnostics_app/configs/colors.dart';
 import 'package:demo_car_diagnostic_application/Car_diagnostics_app/screens/settings_screen.dart';
 import 'home_screen.dart';
 

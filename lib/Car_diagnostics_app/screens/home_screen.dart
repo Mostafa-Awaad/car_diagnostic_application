@@ -1,7 +1,6 @@
 import 'package:demo_car_diagnostic_application/Car_diagnostics_app/widgets/card_grid_home_screen.dart';
 import 'package:demo_car_diagnostic_application/Car_diagnostics_app/widgets/speedometer.dart';
 import 'package:flutter/material.dart';
-import 'package:demo_car_diagnostic_application/Car_diagnostics_app/configs/colors.dart';
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});

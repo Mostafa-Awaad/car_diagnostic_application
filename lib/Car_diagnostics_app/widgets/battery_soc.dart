@@ -1,6 +1,5 @@
 import 'dart:isolate';
 import 'package:demo_car_diagnostic_application/Car_diagnostics_app/guages_display/battery_soc_guage.dart';
-import 'package:demo_car_diagnostic_application/Car_diagnostics_app/guages_display/battery_soh_guage.dart';
 import 'package:demo_car_diagnostic_application/Car_diagnostics_app/model/vehicle_data_signal.dart';
 import 'package:demo_car_diagnostic_application/Car_diagnostics_app/signal_handler.dart';
 import 'package:flutter/material.dart';
