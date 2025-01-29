@@ -1,7 +1,6 @@
 import 'package:demo_car_diagnostic_application/Car_diagnostics_app/widgets/card_grid_home_screen.dart';
 import 'package:demo_car_diagnostic_application/Car_diagnostics_app/widgets/speedometer.dart';
 import 'package:flutter/material.dart';
-import 'package:demo_car_diagnostic_application/Car_diagnostics_app/configs/colors.dart';
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
@@ -15,43 +14,43 @@ class HomeScreen extends StatelessWidget {
           physics: const BouncingScrollPhysics(),
           child: Column(
             children: [
-              Material(
+              const Material(
                 type: MaterialType.transparency,
-                child: Row(
-                  children: [
-                    IconButton(
-                      iconSize: 50,
-                      splashRadius: 25,
-                      onPressed: () {},
-                      icon:
-                          const Icon(Icons.menu_rounded, color: Colors.blue),
-                    ),
-                    const Spacer(),
-                    Stack(
-                      children: [
-                        IconButton(
-                          iconSize: 50,
-                          splashRadius: 25,
-                          onPressed: () {},
-                          icon: const FittedBox(
-                              child: Icon(Icons.account_circle_rounded)),
-                        ),
-                        Positioned(
-                          top: 10,
-                          right: 10,
-                          child: Container(
-                            width: 12,
-                            height: 12,
-                            decoration: const BoxDecoration(
-                              color: Colors.blue,
-                              shape: BoxShape.circle,
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ],
-                ),
+                // child: Row(
+                //   children: [
+                //     IconButton(
+                //       iconSize: 50,
+                //       splashRadius: 25,
+                //       onPressed: () {},
+                //       icon:
+                //           const Icon(Icons.menu_rounded, color: Colors.blue),
+                //     ),
+                //     const Spacer(),
+                //     Stack(
+                //       children: [
+                //         IconButton(
+                //           iconSize: 50,
+                //           splashRadius: 25,
+                //           onPressed: () {},
+                //           icon: const FittedBox(
+                //               child: Icon(Icons.account_circle_rounded)),
+                //         ),
+                //         Positioned(
+                //           top: 10,
+                //           right: 10,
+                //           child: Container(
+                //             width: 12,
+                //             height: 12,
+                //             decoration: const BoxDecoration(
+                //               color: Colors.blue,
+                //               shape: BoxShape.circle,
+                //             ),
+                //           ),
+                //         ),
+                //       ],
+                //     ),
+                //   ],
+                // ),
               ),
               ShaderMask(
                 shaderCallback: (bounds) => const LinearGradient(
