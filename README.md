@@ -120,7 +120,7 @@ The **Car Monitoring System Application** is a real-time vehicle diagnostics and
       - random
        ```
 - **Database**: Supabase (PostgreSQL-based)
-  - **Environment Variables**:
+  - **Environment Variables For Security**:
      - `URL`: Supabase project URL.
      - `KEY`: Supabase project anon key.
 - **Data Format**: DBC to ASC file conversion
